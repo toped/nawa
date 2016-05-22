@@ -14,6 +14,8 @@
 		94FFB8771CF0CA3C009F12DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94FFB8751CF0CA3C009F12DD /* LaunchScreen.storyboard */; };
 		94FFB8811CF0E682009F12DD /* WeatherCardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8801CF0E682009F12DD /* WeatherCardsViewController.swift */; };
 		94FFB8831CF0E842009F12DD /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8821CF0E842009F12DD /* GlobalConstants.swift */; };
+		94FFB8851CF0EEBE009F12DD /* ExpandedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */; };
+		94FFB88B1CF10295009F12DD /* WeatherCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB88A1CF10295009F12DD /* WeatherCardTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		94FFB8781CF0CA3C009F12DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94FFB8801CF0E682009F12DD /* WeatherCardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherCardsViewController.swift; sourceTree = "<group>"; };
 		94FFB8821CF0E842009F12DD /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
+		94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedViewController.swift; sourceTree = "<group>"; };
+		94FFB88A1CF10295009F12DD /* WeatherCardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherCardTableViewCell.swift; path = Classes/TableViewCells/WeatherCardTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,9 +62,11 @@
 		94FFB86B1CF0CA3C009F12DD /* NAWA */ = {
 			isa = PBXGroup;
 			children = (
+				94FFB8881CF10249009F12DD /* Classes */,
 				94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */,
 				94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */,
 				94FFB8801CF0E682009F12DD /* WeatherCardsViewController.swift */,
+				94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */,
 				94FFB8701CF0CA3C009F12DD /* Main.storyboard */,
 				94FFB8731CF0CA3C009F12DD /* Assets.xcassets */,
 				94FFB8751CF0CA3C009F12DD /* LaunchScreen.storyboard */,
@@ -68,6 +74,22 @@
 				94FFB8781CF0CA3C009F12DD /* Info.plist */,
 			);
 			path = NAWA;
+			sourceTree = "<group>";
+		};
+		94FFB8881CF10249009F12DD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				94FFB8891CF10256009F12DD /* TableViewCells */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		94FFB8891CF10256009F12DD /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				94FFB88A1CF10295009F12DD /* WeatherCardTableViewCell.swift */,
+			);
+			name = TableViewCells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,8 +165,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				94FFB86F1CF0CA3C009F12DD /* HomeViewController.swift in Sources */,
+				94FFB8851CF0EEBE009F12DD /* ExpandedViewController.swift in Sources */,
 				94FFB8811CF0E682009F12DD /* WeatherCardsViewController.swift in Sources */,
 				94FFB8831CF0E842009F12DD /* GlobalConstants.swift in Sources */,
+				94FFB88B1CF10295009F12DD /* WeatherCardTableViewCell.swift in Sources */,
 				94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

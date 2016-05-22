@@ -16,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        self.customizeApperance()
+
         return true
     }
 
@@ -41,6 +44,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func customizeApperance(){
+        
+        let navigationBarAppearace = UINavigationBar.appearance()
+        
+        // change navigation item title color
+        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.lightGrayColor(), NSFontAttributeName:UIFont(name: "Helvetica", size: 18.0)!]
+        
+        //View controller-based status bar appearance added to Info.plist
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        
+    }
 
 }
 

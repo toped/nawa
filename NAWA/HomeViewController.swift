@@ -29,7 +29,7 @@ class HomeViewController: UIViewController {
     
     func configureTapGestures() {
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
        
         self.view.addGestureRecognizer(tap)
         
