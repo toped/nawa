@@ -16,7 +16,102 @@
 		94FFB8831CF0E842009F12DD /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8821CF0E842009F12DD /* GlobalConstants.swift */; };
 		94FFB8851CF0EEBE009F12DD /* ExpandedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */; };
 		94FFB88B1CF10295009F12DD /* WeatherCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB88A1CF10295009F12DD /* WeatherCardTableViewCell.swift */; };
+		94FFB8F31CF135B3009F12DD /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E01CF135B3009F12DD /* Alamofire.swift */; };
+		94FFB8F41CF135B3009F12DD /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E11CF135B3009F12DD /* Download.swift */; };
+		94FFB8F51CF135B3009F12DD /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E21CF135B3009F12DD /* Error.swift */; };
+		94FFB8F61CF135B3009F12DD /* Info-tvOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94FFB8E31CF135B3009F12DD /* Info-tvOS.plist */; };
+		94FFB8F71CF135B3009F12DD /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 94FFB8E41CF135B3009F12DD /* Info.plist */; };
+		94FFB8F81CF135B3009F12DD /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E51CF135B3009F12DD /* Manager.swift */; };
+		94FFB8F91CF135B3009F12DD /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E61CF135B3009F12DD /* MultipartFormData.swift */; };
+		94FFB8FA1CF135B3009F12DD /* NetworkReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E71CF135B3009F12DD /* NetworkReachabilityManager.swift */; };
+		94FFB8FB1CF135B3009F12DD /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E81CF135B3009F12DD /* Notifications.swift */; };
+		94FFB8FC1CF135B3009F12DD /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8E91CF135B3009F12DD /* ParameterEncoding.swift */; };
+		94FFB8FD1CF135B3009F12DD /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8EA1CF135B3009F12DD /* Request.swift */; };
+		94FFB8FE1CF135B3009F12DD /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8EB1CF135B3009F12DD /* Response.swift */; };
+		94FFB8FF1CF135B3009F12DD /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8EC1CF135B3009F12DD /* ResponseSerialization.swift */; };
+		94FFB9001CF135B3009F12DD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8ED1CF135B3009F12DD /* Result.swift */; };
+		94FFB9011CF135B3009F12DD /* ServerTrustPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8EE1CF135B3009F12DD /* ServerTrustPolicy.swift */; };
+		94FFB9021CF135B3009F12DD /* Stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8EF1CF135B3009F12DD /* Stream.swift */; };
+		94FFB9031CF135B3009F12DD /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8F01CF135B3009F12DD /* Timeline.swift */; };
+		94FFB9041CF135B3009F12DD /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8F11CF135B3009F12DD /* Upload.swift */; };
+		94FFB9051CF135B3009F12DD /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB8F21CF135B3009F12DD /* Validation.swift */; };
+		94FFB9061CF13600009F12DD /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FFB8D21CF135A7009F12DD /* Alamofire.framework */; };
+		94FFB9071CF13600009F12DD /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 94FFB8D21CF135A7009F12DD /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		94FFB90C1CF13819009F12DD /* OpenWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB90B1CF13819009F12DD /* OpenWeather.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		94FFB8D11CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3319A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+		94FFB8D31CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3E19A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS Tests";
+		};
+		94FFB8D51CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4DD67C0B1A5C55C900ED2280;
+			remoteInfo = "Alamofire OSX";
+		};
+		94FFB8D71CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F829C6B21A7A94F100A2CD59;
+			remoteInfo = "Alamofire OSX Tests";
+		};
+		94FFB8D91CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF626EF1BA7CB3E0011A099;
+			remoteInfo = "Alamofire tvOS";
+		};
+		94FFB8DB1CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF626F81BA7CB3E0011A099;
+			remoteInfo = "Alamofire tvOS Tests";
+		};
+		94FFB8DD1CF135A7009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4202FE01B667AA100C997FB;
+			remoteInfo = "Alamofire watchOS";
+		};
+		94FFB9081CF13600009F12DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		94FFB90A1CF13600009F12DD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				94FFB9071CF13600009F12DD /* Alamofire.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		94FFB8691CF0CA3B009F12DD /* NAWA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NAWA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -30,6 +125,28 @@
 		94FFB8821CF0E842009F12DD /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedViewController.swift; sourceTree = "<group>"; };
 		94FFB88A1CF10295009F12DD /* WeatherCardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherCardTableViewCell.swift; path = Classes/TableViewCells/WeatherCardTableViewCell.swift; sourceTree = "<group>"; };
+		94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Libraries/AlamoFire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		94FFB8DF1CF135B3009F12DD /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Alamofire.h; path = Libraries/AlamoFire/Source/Alamofire.h; sourceTree = "<group>"; };
+		94FFB8E01CF135B3009F12DD /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Libraries/AlamoFire/Source/Alamofire.swift; sourceTree = "<group>"; };
+		94FFB8E11CF135B3009F12DD /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Download.swift; path = Libraries/AlamoFire/Source/Download.swift; sourceTree = "<group>"; };
+		94FFB8E21CF135B3009F12DD /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Libraries/AlamoFire/Source/Error.swift; sourceTree = "<group>"; };
+		94FFB8E31CF135B3009F12DD /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Info-tvOS.plist"; path = "Libraries/AlamoFire/Source/Info-tvOS.plist"; sourceTree = "<group>"; };
+		94FFB8E41CF135B3009F12DD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Libraries/AlamoFire/Source/Info.plist; sourceTree = "<group>"; };
+		94FFB8E51CF135B3009F12DD /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Manager.swift; path = Libraries/AlamoFire/Source/Manager.swift; sourceTree = "<group>"; };
+		94FFB8E61CF135B3009F12DD /* MultipartFormData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultipartFormData.swift; path = Libraries/AlamoFire/Source/MultipartFormData.swift; sourceTree = "<group>"; };
+		94FFB8E71CF135B3009F12DD /* NetworkReachabilityManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NetworkReachabilityManager.swift; path = Libraries/AlamoFire/Source/NetworkReachabilityManager.swift; sourceTree = "<group>"; };
+		94FFB8E81CF135B3009F12DD /* Notifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = Libraries/AlamoFire/Source/Notifications.swift; sourceTree = "<group>"; };
+		94FFB8E91CF135B3009F12DD /* ParameterEncoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Libraries/AlamoFire/Source/ParameterEncoding.swift; sourceTree = "<group>"; };
+		94FFB8EA1CF135B3009F12DD /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Libraries/AlamoFire/Source/Request.swift; sourceTree = "<group>"; };
+		94FFB8EB1CF135B3009F12DD /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Libraries/AlamoFire/Source/Response.swift; sourceTree = "<group>"; };
+		94FFB8EC1CF135B3009F12DD /* ResponseSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Libraries/AlamoFire/Source/ResponseSerialization.swift; sourceTree = "<group>"; };
+		94FFB8ED1CF135B3009F12DD /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Libraries/AlamoFire/Source/Result.swift; sourceTree = "<group>"; };
+		94FFB8EE1CF135B3009F12DD /* ServerTrustPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServerTrustPolicy.swift; path = Libraries/AlamoFire/Source/ServerTrustPolicy.swift; sourceTree = "<group>"; };
+		94FFB8EF1CF135B3009F12DD /* Stream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stream.swift; path = Libraries/AlamoFire/Source/Stream.swift; sourceTree = "<group>"; };
+		94FFB8F01CF135B3009F12DD /* Timeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Timeline.swift; path = Libraries/AlamoFire/Source/Timeline.swift; sourceTree = "<group>"; };
+		94FFB8F11CF135B3009F12DD /* Upload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Libraries/AlamoFire/Source/Upload.swift; sourceTree = "<group>"; };
+		94FFB8F21CF135B3009F12DD /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Libraries/AlamoFire/Source/Validation.swift; sourceTree = "<group>"; };
+		94FFB90B1CF13819009F12DD /* OpenWeather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenWeather.swift; path = Classes/OpenWeather.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FFB9061CF13600009F12DD /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,8 +180,9 @@
 		94FFB86B1CF0CA3C009F12DD /* NAWA */ = {
 			isa = PBXGroup;
 			children = (
-				94FFB8881CF10249009F12DD /* Classes */,
 				94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */,
+				94FFB8881CF10249009F12DD /* Classes */,
+				94FFB8AA1CF13519009F12DD /* Libraries */,
 				94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */,
 				94FFB8801CF0E682009F12DD /* WeatherCardsViewController.swift */,
 				94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */,
@@ -80,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				94FFB8891CF10256009F12DD /* TableViewCells */,
+				94FFB90B1CF13819009F12DD /* OpenWeather.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -92,6 +212,64 @@
 			name = TableViewCells;
 			sourceTree = "<group>";
 		};
+		94FFB8AA1CF13519009F12DD /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				94FFB8C51CF13565009F12DD /* AlamoFire */,
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		94FFB8C51CF13565009F12DD /* AlamoFire */ = {
+			isa = PBXGroup;
+			children = (
+				94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */,
+				94FFB8C61CF13593009F12DD /* Source */,
+			);
+			name = AlamoFire;
+			sourceTree = "<group>";
+		};
+		94FFB8C61CF13593009F12DD /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				94FFB8DF1CF135B3009F12DD /* Alamofire.h */,
+				94FFB8E01CF135B3009F12DD /* Alamofire.swift */,
+				94FFB8E11CF135B3009F12DD /* Download.swift */,
+				94FFB8E21CF135B3009F12DD /* Error.swift */,
+				94FFB8E31CF135B3009F12DD /* Info-tvOS.plist */,
+				94FFB8E41CF135B3009F12DD /* Info.plist */,
+				94FFB8E51CF135B3009F12DD /* Manager.swift */,
+				94FFB8E61CF135B3009F12DD /* MultipartFormData.swift */,
+				94FFB8E71CF135B3009F12DD /* NetworkReachabilityManager.swift */,
+				94FFB8E81CF135B3009F12DD /* Notifications.swift */,
+				94FFB8E91CF135B3009F12DD /* ParameterEncoding.swift */,
+				94FFB8EA1CF135B3009F12DD /* Request.swift */,
+				94FFB8EB1CF135B3009F12DD /* Response.swift */,
+				94FFB8EC1CF135B3009F12DD /* ResponseSerialization.swift */,
+				94FFB8ED1CF135B3009F12DD /* Result.swift */,
+				94FFB8EE1CF135B3009F12DD /* ServerTrustPolicy.swift */,
+				94FFB8EF1CF135B3009F12DD /* Stream.swift */,
+				94FFB8F01CF135B3009F12DD /* Timeline.swift */,
+				94FFB8F11CF135B3009F12DD /* Upload.swift */,
+				94FFB8F21CF135B3009F12DD /* Validation.swift */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		94FFB8C81CF135A7009F12DD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94FFB8D21CF135A7009F12DD /* Alamofire.framework */,
+				94FFB8D41CF135A7009F12DD /* Alamofire iOS Tests.xctest */,
+				94FFB8D61CF135A7009F12DD /* Alamofire.framework */,
+				94FFB8D81CF135A7009F12DD /* Alamofire OSX Tests.xctest */,
+				94FFB8DA1CF135A7009F12DD /* Alamofire.framework */,
+				94FFB8DC1CF135A7009F12DD /* Alamofire tvOS Tests.xctest */,
+				94FFB8DE1CF135A7009F12DD /* Alamofire.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -102,10 +280,12 @@
 				94FFB8651CF0CA3B009F12DD /* Sources */,
 				94FFB8661CF0CA3B009F12DD /* Frameworks */,
 				94FFB8671CF0CA3B009F12DD /* Resources */,
+				94FFB90A1CF13600009F12DD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				94FFB9091CF13600009F12DD /* PBXTargetDependency */,
 			);
 			name = NAWA;
 			productName = NAWA;
@@ -139,12 +319,70 @@
 			mainGroup = 94FFB8601CF0CA3B009F12DD;
 			productRefGroup = 94FFB86A1CF0CA3B009F12DD /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 94FFB8C81CF135A7009F12DD /* Products */;
+					ProjectRef = 94FFB8C71CF135A7009F12DD /* Alamofire.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				94FFB8681CF0CA3B009F12DD /* NAWA */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		94FFB8D21CF135A7009F12DD /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 94FFB8D11CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94FFB8D41CF135A7009F12DD /* Alamofire iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire iOS Tests.xctest";
+			remoteRef = 94FFB8D31CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94FFB8D61CF135A7009F12DD /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 94FFB8D51CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94FFB8D81CF135A7009F12DD /* Alamofire OSX Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire OSX Tests.xctest";
+			remoteRef = 94FFB8D71CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94FFB8DA1CF135A7009F12DD /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 94FFB8D91CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94FFB8DC1CF135A7009F12DD /* Alamofire tvOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire tvOS Tests.xctest";
+			remoteRef = 94FFB8DB1CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94FFB8DE1CF135A7009F12DD /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 94FFB8DD1CF135A7009F12DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		94FFB8671CF0CA3B009F12DD /* Resources */ = {
@@ -153,6 +391,8 @@
 			files = (
 				94FFB8771CF0CA3C009F12DD /* LaunchScreen.storyboard in Resources */,
 				94FFB8741CF0CA3C009F12DD /* Assets.xcassets in Resources */,
+				94FFB8F61CF135B3009F12DD /* Info-tvOS.plist in Resources */,
+				94FFB8F71CF135B3009F12DD /* Info.plist in Resources */,
 				94FFB8721CF0CA3C009F12DD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -164,16 +404,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FFB9001CF135B3009F12DD /* Result.swift in Sources */,
+				94FFB8FC1CF135B3009F12DD /* ParameterEncoding.swift in Sources */,
 				94FFB86F1CF0CA3C009F12DD /* HomeViewController.swift in Sources */,
+				94FFB9011CF135B3009F12DD /* ServerTrustPolicy.swift in Sources */,
+				94FFB8F41CF135B3009F12DD /* Download.swift in Sources */,
 				94FFB8851CF0EEBE009F12DD /* ExpandedViewController.swift in Sources */,
 				94FFB8811CF0E682009F12DD /* WeatherCardsViewController.swift in Sources */,
 				94FFB8831CF0E842009F12DD /* GlobalConstants.swift in Sources */,
+				94FFB8FB1CF135B3009F12DD /* Notifications.swift in Sources */,
+				94FFB8FD1CF135B3009F12DD /* Request.swift in Sources */,
+				94FFB8FE1CF135B3009F12DD /* Response.swift in Sources */,
+				94FFB8FF1CF135B3009F12DD /* ResponseSerialization.swift in Sources */,
+				94FFB9051CF135B3009F12DD /* Validation.swift in Sources */,
+				94FFB8F91CF135B3009F12DD /* MultipartFormData.swift in Sources */,
 				94FFB88B1CF10295009F12DD /* WeatherCardTableViewCell.swift in Sources */,
 				94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */,
+				94FFB9031CF135B3009F12DD /* Timeline.swift in Sources */,
+				94FFB90C1CF13819009F12DD /* OpenWeather.swift in Sources */,
+				94FFB9041CF135B3009F12DD /* Upload.swift in Sources */,
+				94FFB8F51CF135B3009F12DD /* Error.swift in Sources */,
+				94FFB8F31CF135B3009F12DD /* Alamofire.swift in Sources */,
+				94FFB8FA1CF135B3009F12DD /* NetworkReachabilityManager.swift in Sources */,
+				94FFB8F81CF135B3009F12DD /* Manager.swift in Sources */,
+				94FFB9021CF135B3009F12DD /* Stream.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		94FFB9091CF13600009F12DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Alamofire iOS";
+			targetProxy = 94FFB9081CF13600009F12DD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		94FFB8701CF0CA3C009F12DD /* Main.storyboard */ = {
@@ -284,6 +550,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = NAWA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.topedaram.NAWA;
@@ -298,6 +565,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = NAWA/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.topedaram.NAWA;
@@ -325,6 +593,7 @@
 				94FFB87D1CF0CA3C009F12DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

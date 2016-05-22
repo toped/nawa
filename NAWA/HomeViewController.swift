@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class HomeViewController: UIViewController {
 
@@ -24,7 +25,7 @@ class HomeViewController: UIViewController {
 
         configureTapGestures()
         configureUI()
-
+        
     }
     
     func configureTapGestures() {
@@ -44,6 +45,18 @@ class HomeViewController: UIViewController {
         getWeatherButton.clipsToBounds = true
         
     }
+    
+    @IBAction func getWeather(sender: AnyObject) {
+        
+        let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
+        
+        openWeatherService.getCurrentWeather(cityTextField.text!, state:stateTextField.text!) {
+            (result: Any, success: Bool) in
+            print("got back: \(result)")
+        }
+
+    }
+    
     
     func dismissKeyboard() {
         
