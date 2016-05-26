@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		942299D31CF15650004DA301 /* StatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942299D21CF15650004DA301 /* StatesViewController.swift */; };
+		945CDD621CF14E2D0031CA9C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945CDD611CF14E2D0031CA9C /* State.swift */; };
+		945F5F581CF500FA00A7FEE5 /* StateDataFecher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F571CF500FA00A7FEE5 /* StateDataFecher.swift */; };
+		945F5F601CF5DE7400A7FEE5 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F5F1CF5DE7400A7FEE5 /* City.swift */; };
+		945F5F641CF5E10400A7FEE5 /* states.plist in Resources */ = {isa = PBXBuildFile; fileRef = 945F5F631CF5E10400A7FEE5 /* states.plist */; };
+		945F5F661CF5E3AD00A7FEE5 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */; };
+		94ADB11A1CF77CC200D24734 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ADB1191CF77CC200D24734 /* WeatherCondition.swift */; };
 		94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */; };
 		94FFB86F1CF0CA3C009F12DD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */; };
 		94FFB8721CF0CA3C009F12DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94FFB8701CF0CA3C009F12DD /* Main.storyboard */; };
@@ -114,6 +121,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		942299D21CF15650004DA301 /* StatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesViewController.swift; sourceTree = "<group>"; };
+		945CDD611CF14E2D0031CA9C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = State.swift; path = Classes/State.swift; sourceTree = "<group>"; };
+		945F5F571CF500FA00A7FEE5 /* StateDataFecher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StateDataFecher.swift; path = Classes/StateDataFecher.swift; sourceTree = "<group>"; };
+		945F5F5F1CF5DE7400A7FEE5 /* City.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = City.swift; path = Classes/City.swift; sourceTree = "<group>"; };
+		945F5F631CF5E10400A7FEE5 /* states.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = states.plist; path = ../../states.plist; sourceTree = "<group>"; };
+		945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CitiesViewController.swift; sourceTree = "<group>"; };
+		94ADB1191CF77CC200D24734 /* WeatherCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherCondition.swift; path = Classes/WeatherCondition.swift; sourceTree = "<group>"; };
 		94FFB8691CF0CA3B009F12DD /* NAWA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NAWA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -180,10 +194,13 @@
 		94FFB86B1CF0CA3C009F12DD /* NAWA */ = {
 			isa = PBXGroup;
 			children = (
+				945F5F631CF5E10400A7FEE5 /* states.plist */,
 				94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */,
 				94FFB8881CF10249009F12DD /* Classes */,
 				94FFB8AA1CF13519009F12DD /* Libraries */,
 				94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */,
+				942299D21CF15650004DA301 /* StatesViewController.swift */,
+				945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */,
 				94FFB8801CF0E682009F12DD /* WeatherCardsViewController.swift */,
 				94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */,
 				94FFB8701CF0CA3C009F12DD /* Main.storyboard */,
@@ -199,7 +216,11 @@
 			isa = PBXGroup;
 			children = (
 				94FFB8891CF10256009F12DD /* TableViewCells */,
+				945F5F571CF500FA00A7FEE5 /* StateDataFecher.swift */,
+				945CDD611CF14E2D0031CA9C /* State.swift */,
+				945F5F5F1CF5DE7400A7FEE5 /* City.swift */,
 				94FFB90B1CF13819009F12DD /* OpenWeather.swift */,
+				94ADB1191CF77CC200D24734 /* WeatherCondition.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -391,6 +412,7 @@
 			files = (
 				94FFB8771CF0CA3C009F12DD /* LaunchScreen.storyboard in Resources */,
 				94FFB8741CF0CA3C009F12DD /* Assets.xcassets in Resources */,
+				945F5F641CF5E10400A7FEE5 /* states.plist in Resources */,
 				94FFB8F61CF135B3009F12DD /* Info-tvOS.plist in Resources */,
 				94FFB8F71CF135B3009F12DD /* Info.plist in Resources */,
 				94FFB8721CF0CA3C009F12DD /* Main.storyboard in Resources */,
@@ -410,15 +432,20 @@
 				94FFB9011CF135B3009F12DD /* ServerTrustPolicy.swift in Sources */,
 				94FFB8F41CF135B3009F12DD /* Download.swift in Sources */,
 				94FFB8851CF0EEBE009F12DD /* ExpandedViewController.swift in Sources */,
+				945F5F601CF5DE7400A7FEE5 /* City.swift in Sources */,
+				945CDD621CF14E2D0031CA9C /* State.swift in Sources */,
+				945F5F581CF500FA00A7FEE5 /* StateDataFecher.swift in Sources */,
 				94FFB8811CF0E682009F12DD /* WeatherCardsViewController.swift in Sources */,
 				94FFB8831CF0E842009F12DD /* GlobalConstants.swift in Sources */,
 				94FFB8FB1CF135B3009F12DD /* Notifications.swift in Sources */,
+				94ADB11A1CF77CC200D24734 /* WeatherCondition.swift in Sources */,
 				94FFB8FD1CF135B3009F12DD /* Request.swift in Sources */,
 				94FFB8FE1CF135B3009F12DD /* Response.swift in Sources */,
 				94FFB8FF1CF135B3009F12DD /* ResponseSerialization.swift in Sources */,
 				94FFB9051CF135B3009F12DD /* Validation.swift in Sources */,
 				94FFB8F91CF135B3009F12DD /* MultipartFormData.swift in Sources */,
 				94FFB88B1CF10295009F12DD /* WeatherCardTableViewCell.swift in Sources */,
+				945F5F661CF5E3AD00A7FEE5 /* CitiesViewController.swift in Sources */,
 				94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */,
 				94FFB9031CF135B3009F12DD /* Timeline.swift in Sources */,
 				94FFB90C1CF13819009F12DD /* OpenWeather.swift in Sources */,
@@ -428,6 +455,7 @@
 				94FFB8FA1CF135B3009F12DD /* NetworkReachabilityManager.swift in Sources */,
 				94FFB8F81CF135B3009F12DD /* Manager.swift in Sources */,
 				94FFB9021CF135B3009F12DD /* Stream.swift in Sources */,
+				942299D31CF15650004DA301 /* StatesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

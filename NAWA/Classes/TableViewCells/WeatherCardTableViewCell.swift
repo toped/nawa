@@ -12,6 +12,7 @@ class WeatherCardTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cellBackground: UIImageView!
     @IBOutlet weak var locationName: UILabel!
+    @IBOutlet weak var currentTemperature: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,6 +23,7 @@ class WeatherCardTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+        self.contentView.backgroundColor = self.contentView.backgroundColor
     }
 
 }

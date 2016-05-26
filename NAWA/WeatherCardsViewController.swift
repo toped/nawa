@@ -13,13 +13,16 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
     var weatherLocations = [String]()
     var chosenCellFrame = CGRect()
     var expander = ExpandedViewController?()
+    var currentConditions = WeatherCondition?()
+
     @IBOutlet weak var weatherCardsTable: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        weatherLocations = ["Starkville, MS", "Cupertino, CA", "Mountain View, CA"];
+        weatherLocations = ["\(self.currentConditions!.cityName), \(self.currentConditions!.stateAbbreiviation)", "Cupertino, CA", "Mountain View, CA"];
+        
         self.edgesForExtendedLayout = UIRectEdge.None
         self.navigationItem.title = "NAWA"
         
@@ -43,6 +46,8 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
                                                 action: #selector(self.changeLocation))
         
         navigationItem.rightBarButtonItems = [changeLocationBtn]
+        
+        
     }
     
     func changeLocation() {
@@ -86,6 +91,8 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         if indexPath.row == 0 {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 1.0)
             cell.cellBackground.image = UIImage(named: "home-background")
+            
+            cell.currentTemperature.text = "\(self.currentConditions!.temperature_fahrenheit)°"
         }
         else if indexPath.row == 1 {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 1.0)
@@ -116,6 +123,7 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         if indexPath.row == 0 {
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 1.0)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
+            self.expander!.currentTemperatureLabel.text = "\(self.currentConditions!.temperature_fahrenheit)°"
         }
         else if indexPath.row == 1 {
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 1.0)
@@ -126,13 +134,13 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background3")
         }
         
-        
+        self.expander!.view.alpha = 0
         let label = self.expander?.locationLabel
         label!.text = weatherLocations[indexPath.row];
         self.view.addSubview(self.expander!.view)
         
         //animate the view
-        UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
             
             self.expander!.view.frame = tableView.frame
             self.expander!.locationBackgroundImage.alpha = 0.200000002980232
@@ -151,18 +159,16 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
     func expandedCellWillCollapse() {
         
         expander!.willMoveToParentViewController(nil)
-        
+        self.expander!.currentTemperatureLabel.text = ""
+        self.expander!.locationLabel.text = ""
+
         //animate the view
-        UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
             
             self.expander!.view.frame = self.chosenCellFrame
             self.expander!.locationBackgroundImage.alpha = 0
             self.expander!.view.alpha = 0
             self.expander!.view.backgroundColor = self.expander!.cell.backgroundColor
-            
-            //self.expander!.view.alpha = 0
-            
-            
             
             }, completion: { (finished: Bool) -> Void in
                 

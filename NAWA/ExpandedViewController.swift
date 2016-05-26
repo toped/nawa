@@ -18,6 +18,7 @@ class ExpandedViewController: UIViewController {
     @IBOutlet weak var cell: UIView!
     @IBOutlet weak var locationBackgroundImage: UIImageView!
     @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var currentTemperatureLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

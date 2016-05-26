@@ -9,23 +9,33 @@
 import UIKit
 import Alamofire
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionDelegate, CitySelectionDelegate {
 
     @IBOutlet weak var locationInputView: UIView!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var stateTextField: UITextField!
     @IBOutlet weak var getWeatherButton: UIButton!
+    var states = [State]()
+    var cities = [City]()
+    var weatherConditions = WeatherCondition?()
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //Hide the navigation bar
+        self.navigationController?.navigationBarHidden = true
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        //Hide the navigation bar
-        self.navigationController?.navigationBarHidden = true
+        self.edgesForExtendedLayout = UIRectEdge.None
 
         configureTapGestures()
         configureUI()
-        
+        //Populate the cities array
+        self.populateStates()
     }
     
     func configureTapGestures() {
@@ -46,13 +56,137 @@ class HomeViewController: UIViewController {
         
     }
     
-    @IBAction func getWeather(sender: AnyObject) {
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        if textField == self.stateTextField {
+            self.selectState()
+            
+            return false
+        }
+        
+        if textField == self.cityTextField {
+            
+            if self.stateTextField.hasText() {
+                self.selectCity()
+            }
+            else {
+                let alertController = UIAlertController(title: "Whoops", message: "You must select a state first.", preferredStyle: .Alert)
+                
+                let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                    // ...
+                }
+                alertController.addAction(cancelAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+
+            }
+            
+            return false
+        }
+        
+        return true
+    }
+    
+    
+    func selectState() {
+        
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("States") as? StatesViewController
+        vc?.delegate = self
+        vc?.states = self.states
+        let vc_nav = UINavigationController(rootViewController: vc!)
+        self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+        
+    }
+    
+    func selectCity() {
+        
+        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("Cities") as? CitiesViewController
+        vc?.delegate = self
+        vc?.cities = self.cities
+        let vc_nav = UINavigationController(rootViewController: vc!)
+        self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+        
+    }
+    
+    func populateStates() {
+        self.loadStatesPlistFromBundle()
+        
+        //Be sure to reinitialize array
+        states = [State]()
+        
+        //Load States plist file
+        let fileManager = NSFileManager.defaultManager()
+        let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+        let statesFilePath = directoryURL.URLByAppendingPathComponent("states.plist")
+        
+        //Create Dictionary from file (Note: swift APIs don't have all the functionality of the core NSClasses so we have to use NSDictionary)
+        let statesDictionary = NSDictionary(contentsOfFile: statesFilePath.path!)
+        
+        //Create an instance of State for each record in plist file
+        for stateRecord in statesDictionary! {
+            print(stateRecord)
+           //Create Dictionary from agent record
+            let cityDictionary: NSDictionary = (statesDictionary?.objectForKey(stateRecord.key)) as! NSDictionary
+            
+            //Init the CountyAgent
+            let state = State(
+                name: cityDictionary.objectForKey("state") as! String,
+                stateAbbriviation: cityDictionary.objectForKey("abbriviation") as! String
+            )
+            
+            //Add county agent to countyAgents array
+            states.append(state)
+ 
+        }
+       
+        //Sort the array of states stateAbbriviation
+        states.sortInPlace({ $0.stateAbbriviation < $1.stateAbbriviation })
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let encodedData = NSKeyedArchiver.archivedDataWithRootObject(states)
+        userDefaults.setObject(encodedData, forKey:GlobalConstants.STATES_KEY)
+        userDefaults.synchronize()
+ 
+    }
+    
+    func loadStatesPlistFromBundle() {
+        
+        let fileManager = NSFileManager.defaultManager()
+        let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+        let destinationFileComponent = directoryURL.URLByAppendingPathComponent("states.plist")
+        
+        let bundle = NSBundle.mainBundle().pathForResource("states", ofType: "plist")! //Note: I'm force unwrappign because I know this file exists
+        
+        //If the file does not already exist int the documents folder copy the file in the bundle to the documents directory
+        if !fileManager.fileExistsAtPath(destinationFileComponent.path!) {
+            do {
+                try fileManager.copyItemAtPath(bundle, toPath: destinationFileComponent.path!)
+            }
+            catch {
+                print("Error: \(error)")
+            }
+        }
+    }
+    
+    func getWeather(sender: AnyObject) {
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
         
-        openWeatherService.getCurrentWeather(cityTextField.text!, state:stateTextField.text!) {
-            (result: Any, success: Bool) in
-            print("got back: \(result)")
+        openWeatherService.getCurrentWeather(cityTextField.text!, state:stateTextField.text!) { (result, success) in
+            if success {
+                
+                let userDefaults = NSUserDefaults.standardUserDefaults()
+                
+                userDefaults.synchronize()
+                
+                self.weatherConditions = result!
+                self.performSegueWithIdentifier("getWeather", sender: nil)
+                
+            }
+            else {
+                
+            }
         }
 
     }
@@ -63,12 +197,50 @@ class HomeViewController: UIViewController {
         self.view.endEditing(true)
         
     }
-
+    
+    func updateViewWithState(state:String) {
+        
+        self.stateTextField.text = state
+        
+        let stateInfo = StateDataFecher.init()
+        
+        stateInfo.getCitiesForState(state, completion: { (result, success) in
+            
+            if success {
+                
+                self.cities = result!
+                
+            }
+            else {
+                
+            }
+            
+        })
+        
+    
+    }
+    
+    func updateViewWithCity(city:String) {
+        
+        self.cityTextField.text = city
+        self.getWeather(self)
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "getWeather" {
+            
+            let destinationView = segue.destinationViewController as! WeatherCardsViewController
+            
+            destinationView.currentConditions = self.weatherConditions
+        }
+    }
+    
 
 }
 

@@ -26,11 +26,17 @@ class OpenWeather: NSObject {
     }
     
     
-    func getCurrentWeather(city: String, state: String, completion: (result: Any, success: Bool) -> Void) {
+    func getCurrentWeather(city: String, state: String, completion: (result: WeatherCondition?, success: Bool) -> Void) {
         
-        let URL = NSURL(string: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + self.apiKey)!
-        print("got back: \(URL)")
-        let URLRequest = NSMutableURLRequest(URL: URL)
+        let url : String = "http://api.openweathermap.org/data/2.5/weather?q=\(city), \(state)&appid=\(self.apiKey)"
+        let urlStr : String = url.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!
+        //let searchURL : NSURL = NSURL(string: urlStr as String)!
+
+        let searchURL : NSURL = NSURL(string: urlStr)!
+        
+        print("got back: \(searchURL)")
+        print("got back: \(searchURL)")
+        let URLRequest = NSMutableURLRequest(URL: searchURL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
         
         Alamofire.request(URLRequest).responseJSON { response in
@@ -39,18 +45,34 @@ class OpenWeather: NSObject {
             //print(response.data)     // server data
             //print(response.result)   // result of response serialization
             
-            if response.response != nil {
-                /* If get a response form the server */
-                completion(result:response, success:true)
-
+            switch response.result {
+            case .Success(let JSON):
+                print("Success with JSON: \(JSON)")
+                
+                let response = JSON as! [String: AnyObject]
+                
+                guard let currentWeather = response["main"] as? [String: AnyObject],
+                    let currentTemp = currentWeather["temp"],
+                    let currentTempMin = currentWeather["temp_min"],
+                    let currentTempMax = currentWeather["temp_max"] else {
+                        print("Request parse failed with gaurd error")
+                        return;
+                }
+                print(currentTemp)
+                
+                let weatherConditions = WeatherCondition.init(city: city, state: state, description:"", temperature:"\(currentTemp)", temperatureMin:"\(currentTempMin)", temperatureMax:"\(currentTempMax)")
+                
+                completion(result:weatherConditions, success:true)
+                
+                
+            case .Failure(let error):
+                print("Request failed with error: \(error)")
+                
+                completion(result:nil, success:false)
                 
             }
-            else {
-                /* If we don't get a response form the server (or no internet connection) */
-                completion(result:"No response!", success:false)
 
-                
-            }
+            
         }
     }
 }

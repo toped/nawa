@@ -19,13 +19,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "NAWA/WeatherCardsViewController.swift"
-            timestampString = "485567810.630968"
+            filePath = "NAWA/Classes/OpenWeather.swift"
+            timestampString = "485982617.515941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "tableView(_:didSelectRowAtIndexPath:)"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "getCurrentWeather(_:state:completion:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

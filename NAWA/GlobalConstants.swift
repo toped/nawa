@@ -10,12 +10,17 @@ import Foundation
 import UIKit
 
 struct GlobalConstants {
-    
+    //NSUserDefaults Keys
+    static let CITIES_KEY               = "CITIES_KEY"
+    static let STATES_KEY               = "STATES_KEY"
+
     //TableViewCell Identifiers
-    static let WEATHER_CELL_IDENTIFIER = "WEATHER_CELL"
+    static let WEATHER_CELL_IDENTIFIER  = "WEATHER_CELL"
+    static let CITY_CELL_IDENTIFIER     = "CITY_CELL"
+    static let STATE_CELL_IDENTIFIER    = "STATE_CELL"
     
     //OPEN WEATHER API KEY
-    static let OPEN_WEATHER_API_KEY    = "5fb7b2d5da9055f9f6c025c47cf94ec9"
+    static let OPEN_WEATHER_API_KEY     = "5fb7b2d5da9055f9f6c025c47cf94ec9"
     
     static func uicolorFromHex(rgbValue:UInt32)->UIColor{
         
