@@ -14,6 +14,7 @@
 		945F5F601CF5DE7400A7FEE5 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F5F1CF5DE7400A7FEE5 /* City.swift */; };
 		945F5F661CF5E3AD00A7FEE5 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */; };
 		94ADB11A1CF77CC200D24734 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ADB1191CF77CC200D24734 /* WeatherCondition.swift */; };
+		94EC56121D038B70006AE5C2 /* DailyForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EC56111D038B70006AE5C2 /* DailyForecast.swift */; };
 		94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */; };
 		94FFB86F1CF0CA3C009F12DD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */; };
 		94FFB8721CF0CA3C009F12DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94FFB8701CF0CA3C009F12DD /* Main.storyboard */; };
@@ -128,6 +129,7 @@
 		945F5F5F1CF5DE7400A7FEE5 /* City.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = City.swift; path = Classes/City.swift; sourceTree = "<group>"; };
 		945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CitiesViewController.swift; sourceTree = "<group>"; };
 		94ADB1191CF77CC200D24734 /* WeatherCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherCondition.swift; path = Classes/WeatherCondition.swift; sourceTree = "<group>"; };
+		94EC56111D038B70006AE5C2 /* DailyForecast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DailyForecast.swift; path = Classes/DailyForecast.swift; sourceTree = "<group>"; };
 		94FFB8691CF0CA3B009F12DD /* NAWA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NAWA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94FFB86E1CF0CA3C009F12DD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				945F5F5F1CF5DE7400A7FEE5 /* City.swift */,
 				94FFB90B1CF13819009F12DD /* OpenWeather.swift */,
 				94ADB1191CF77CC200D24734 /* WeatherCondition.swift */,
+				94EC56111D038B70006AE5C2 /* DailyForecast.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				945F5F581CF500FA00A7FEE5 /* StateDataFecher.swift in Sources */,
 				94FFB8811CF0E682009F12DD /* WeatherCardsViewController.swift in Sources */,
 				94FFB8831CF0E842009F12DD /* GlobalConstants.swift in Sources */,
+				94EC56121D038B70006AE5C2 /* DailyForecast.swift in Sources */,
 				94FFB8FB1CF135B3009F12DD /* Notifications.swift in Sources */,
 				94ADB11A1CF77CC200D24734 /* WeatherCondition.swift in Sources */,
 				94FFB8FD1CF135B3009F12DD /* Request.swift in Sources */,

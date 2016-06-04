@@ -146,22 +146,19 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         
         //customize the expanderview based on row
         if indexPath.row == 0 {
+            self.expander!.currentWeatherConditions = currentPrimaryConditions
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
-            self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°F"
-            self.expander!.mainWeatherIcon.image = UIImage(named:"\(self.currentPrimaryConditions!.mainIcon).png")
+             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
         }
         else if indexPath.row == 1 {
+            self.expander!.currentWeatherConditions = currentSecondaryConditions
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background2")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°F"
-            self.expander!.mainWeatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions!.mainIcon).png")
         }
         else {
+            self.expander!.currentWeatherConditions = currentTertiaryConditions
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background3")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentTertiaryConditions!.temperature_fahrenheit)°F"
-            self.expander!.mainWeatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions!.mainIcon).png")
         }
         self.expander!.bottomCell.backgroundColor = self.expander!.cell.backgroundColor
         let label = self.expander?.locationLabel

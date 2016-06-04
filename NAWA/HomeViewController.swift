@@ -58,6 +58,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
             
             self.primaryCity = userDefaults.stringForKey(GlobalConstants.PRIMARY_CITY_KEY)
             self.primaryState = userDefaults.stringForKey(GlobalConstants.PRIMARY_STATE_KEY)
+            self.secondaryCity = userDefaults.stringForKey(GlobalConstants.SECONDARY_CITY_KEY)
+            self.secondaryState = userDefaults.stringForKey(GlobalConstants.SECONDARY_STATE_KEY)
+            self.tertiaryCity = userDefaults.stringForKey(GlobalConstants.TERTIARY_CITY_KEY)
+            self.tertiaryState = userDefaults.stringForKey(GlobalConstants.TERTIARY_STATE_KEY)
             self.view.alpha = 0
             self.getWeather("not self")
             
@@ -215,19 +219,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
         openWeatherService.getCurrentWeather(self.primaryCity!, state:self.primaryState!) { (result, success) in
             if success {
                 
-                let userDefaults = NSUserDefaults.standardUserDefaults()
-                
-                userDefaults.synchronize()
-                
                 self.primaryWeatherConditions = result!
                 
                 //get secondary weather
                 openWeatherService.getCurrentWeather(self.secondaryCity!, state:self.secondaryState!) { (result, success) in
                     if success {
-                        
-                        let userDefaults = NSUserDefaults.standardUserDefaults()
-                        
-                        userDefaults.synchronize()
                         
                         self.secondaryWeatherConditions = result!
                         
@@ -235,10 +231,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
                         //get tertiary weather conditions
                         openWeatherService.getCurrentWeather(self.tertiaryCity!, state:self.tertiaryState!) { (result, success) in
                             if success {
-                                
-                                let userDefaults = NSUserDefaults.standardUserDefaults()
-                                
-                                userDefaults.synchronize()
                                 
                                 self.tertiaryWeatherConditions = result!
                                 
@@ -322,14 +314,17 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
             let userDefaults = NSUserDefaults.standardUserDefaults()
             userDefaults.setObject(self.primaryWeatherConditions?.cityName, forKey:GlobalConstants.PRIMARY_CITY_KEY)
             userDefaults.setObject(self.primaryWeatherConditions?.stateAbbreiviation, forKey:GlobalConstants.PRIMARY_STATE_KEY)
-            userDefaults.setObject(self.primaryWeatherConditions?.cityName, forKey:GlobalConstants.SECONDARY_CITY_KEY)
-            userDefaults.setObject(self.primaryWeatherConditions?.stateAbbreiviation, forKey:GlobalConstants.SECONDARY_STATE_KEY)
-            userDefaults.setObject(self.primaryWeatherConditions?.cityName, forKey:GlobalConstants.TERTIARY_CITY_KEY)
-            userDefaults.setObject(self.primaryWeatherConditions?.stateAbbreiviation, forKey:GlobalConstants.TERTIARY_STATE_KEY)
+            userDefaults.setObject(self.secondaryWeatherConditions?.cityName, forKey:GlobalConstants.SECONDARY_CITY_KEY)
+            userDefaults.setObject(self.secondaryWeatherConditions?.stateAbbreiviation, forKey:GlobalConstants.SECONDARY_STATE_KEY)
+            userDefaults.setObject(self.tertiaryWeatherConditions?.cityName, forKey:GlobalConstants.TERTIARY_CITY_KEY)
+            userDefaults.setObject(self.tertiaryWeatherConditions?.stateAbbreiviation, forKey:GlobalConstants.TERTIARY_STATE_KEY)
             userDefaults.synchronize()
 
         }
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        UIView.setAnimationsEnabled(true)
+    }
 }
 

@@ -35,7 +35,7 @@ class OpenWeather: NSObject {
         let searchURL : NSURL = NSURL(string: urlStr)!
         
         print("got back: \(searchURL)")
-        print("got back: \(searchURL)")
+        
         let URLRequest = NSMutableURLRequest(URL: searchURL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
         
@@ -47,7 +47,7 @@ class OpenWeather: NSObject {
             
             switch response.result {
             case .Success(let JSON):
-                print("Success with JSON: \(JSON)")
+                //print("Success with JSON: \(JSON)")
                 
                 let response = JSON as! [String: AnyObject]
                 
@@ -83,4 +83,82 @@ class OpenWeather: NSObject {
             
         }
     }
+    
+    func get5DayForcast(city: String, state: String, completion: (result: [DailyForecast]?, success: Bool) -> Void) {
+        
+        let url : String = "http://api.openweathermap.org/data/2.5/forecast/daily?q=\(city), \(state)&appid=\(self.apiKey)"
+        let urlStr : String = url.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!
+        //let searchURL : NSURL = NSURL(string: urlStr as String)!
+        
+        let searchURL : NSURL = NSURL(string: urlStr)!
+        
+        print("got back forecast: \(searchURL)")
+        
+        let URLRequest = NSMutableURLRequest(URL: searchURL)
+        URLRequest.cachePolicy = .ReloadIgnoringCacheData
+        
+        Alamofire.request(URLRequest).responseJSON { response in
+            //print(response.request)  // original URL request
+            //print(response.response) // URL response
+            //print(response.data)     // server data
+            //print(response.result)   // result of response serialization
+            
+            switch response.result {
+            case .Success(let JSON):
+                print("Success with JSON: \(JSON)")
+                
+                let response = JSON as! [String: AnyObject]
+                let forecasts = response["list"] as! NSArray
+                
+                var dailyForecasts = [DailyForecast]()
+                
+                for item in forecasts {
+                    
+                    let currentDay = item["dt"] as! Double
+                    let date = NSDate(timeIntervalSince1970: currentDay)
+
+                    let usDateFormat = NSDateFormatter.dateFormatFromTemplate("EEEE", options: 0, locale: NSLocale(localeIdentifier: "en-US"))
+                    
+                    let formatter = NSDateFormatter()
+                    formatter.dateFormat = usDateFormat
+                    let usSwiftDayString = formatter.stringFromDate(date)
+                    
+                    
+                    guard let currentTemp = item["temp"] as? [String: AnyObject],
+                        let currentTempDay = currentTemp["day"],
+                        let currentTempMin = currentTemp["min"],
+                        let currentTempMax = currentTemp["max"] else {
+                            print("Request parse failed with gaurd error")
+                            return;
+                    }
+                    
+                    let weather = item["weather"] as! NSArray
+
+                    guard let weatherList = weather.objectAtIndex(0) as? [String: AnyObject],
+                        let icon = weatherList["icon"] else {
+                            print("Request parse failed with gaurd error")
+                            return;
+                    }
+                    
+                    let forcast = DailyForecast.init(day: usSwiftDayString, description:"", mainIcon:icon as! String, temperature:"\(currentTempDay)", temperatureMin:"\(currentTempMin)", temperatureMax:"\(currentTempMax)")
+                    
+                    dailyForecasts.append(forcast)
+                    //print(usSwiftDayString)
+
+                }
+            
+                completion(result:dailyForecasts, success:true)
+
+                
+            case .Failure(let error):
+                print("Request failed with error: \(error)")
+                
+                completion(result:nil, success:false)
+                
+            }
+            
+            
+        }
+    }
+
 }
