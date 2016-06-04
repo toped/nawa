@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		942299D31CF15650004DA301 /* StatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942299D21CF15650004DA301 /* StatesViewController.swift */; };
+		9436C75C1CFD485D0038BCD1 /* states.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9436C75B1CFD485D0038BCD1 /* states.plist */; };
 		945CDD621CF14E2D0031CA9C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945CDD611CF14E2D0031CA9C /* State.swift */; };
 		945F5F581CF500FA00A7FEE5 /* StateDataFecher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F571CF500FA00A7FEE5 /* StateDataFecher.swift */; };
 		945F5F601CF5DE7400A7FEE5 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F5F1CF5DE7400A7FEE5 /* City.swift */; };
-		945F5F641CF5E10400A7FEE5 /* states.plist in Resources */ = {isa = PBXBuildFile; fileRef = 945F5F631CF5E10400A7FEE5 /* states.plist */; };
 		945F5F661CF5E3AD00A7FEE5 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */; };
 		94ADB11A1CF77CC200D24734 /* WeatherCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ADB1191CF77CC200D24734 /* WeatherCondition.swift */; };
 		94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */; };
@@ -122,10 +122,10 @@
 
 /* Begin PBXFileReference section */
 		942299D21CF15650004DA301 /* StatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesViewController.swift; sourceTree = "<group>"; };
+		9436C75B1CFD485D0038BCD1 /* states.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = states.plist; sourceTree = "<group>"; };
 		945CDD611CF14E2D0031CA9C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = State.swift; path = Classes/State.swift; sourceTree = "<group>"; };
 		945F5F571CF500FA00A7FEE5 /* StateDataFecher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StateDataFecher.swift; path = Classes/StateDataFecher.swift; sourceTree = "<group>"; };
 		945F5F5F1CF5DE7400A7FEE5 /* City.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = City.swift; path = Classes/City.swift; sourceTree = "<group>"; };
-		945F5F631CF5E10400A7FEE5 /* states.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = states.plist; path = ../../states.plist; sourceTree = "<group>"; };
 		945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CitiesViewController.swift; sourceTree = "<group>"; };
 		94ADB1191CF77CC200D24734 /* WeatherCondition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherCondition.swift; path = Classes/WeatherCondition.swift; sourceTree = "<group>"; };
 		94FFB8691CF0CA3B009F12DD /* NAWA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NAWA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,7 +194,7 @@
 		94FFB86B1CF0CA3C009F12DD /* NAWA */ = {
 			isa = PBXGroup;
 			children = (
-				945F5F631CF5E10400A7FEE5 /* states.plist */,
+				9436C75B1CFD485D0038BCD1 /* states.plist */,
 				94FFB86C1CF0CA3C009F12DD /* AppDelegate.swift */,
 				94FFB8881CF10249009F12DD /* Classes */,
 				94FFB8AA1CF13519009F12DD /* Libraries */,
@@ -412,8 +412,8 @@
 			files = (
 				94FFB8771CF0CA3C009F12DD /* LaunchScreen.storyboard in Resources */,
 				94FFB8741CF0CA3C009F12DD /* Assets.xcassets in Resources */,
-				945F5F641CF5E10400A7FEE5 /* states.plist in Resources */,
 				94FFB8F61CF135B3009F12DD /* Info-tvOS.plist in Resources */,
+				9436C75C1CFD485D0038BCD1 /* states.plist in Resources */,
 				94FFB8F71CF135B3009F12DD /* Info.plist in Resources */,
 				94FFB8721CF0CA3C009F12DD /* Main.storyboard in Resources */,
 			);

@@ -95,10 +95,10 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         // Configure the cell...
         if shouldShowSearchResults {
-            cell.textLabel?.text = "\(filteredStates[indexPath.row].name), \(filteredStates[indexPath.row].stateAbbriviation)"
+            cell.textLabel?.text = "\(filteredStates[indexPath.row].name) (\(filteredStates[indexPath.row].stateAbbriviation))"
         }
         else {
-            cell.textLabel?.text = "\(states[indexPath.row].name), \(states[indexPath.row].stateAbbriviation)"
+            cell.textLabel?.text = "\(states[indexPath.row].name) (\(states[indexPath.row].stateAbbriviation))"
             //cell.textLabel?.text = ""
         }
         

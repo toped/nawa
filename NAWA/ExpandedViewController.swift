@@ -16,6 +16,7 @@ class ExpandedViewController: UIViewController {
     
     weak var delegate:ExpandedCellDelegate?
     @IBOutlet weak var cell: UIView!
+    @IBOutlet weak var bottomCell: UIView!
     @IBOutlet weak var locationBackgroundImage: UIImageView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var currentTemperatureLabel: UILabel!

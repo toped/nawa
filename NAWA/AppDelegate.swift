@@ -51,6 +51,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // change navigation item title color
         navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.lightGrayColor(), NSFontAttributeName:UIFont(name: "Helvetica", size: 18.0)!]
         
+        // change navigation bar color
+        navigationBarAppearace.tintColor =  GlobalConstants.uicolorFromHex(0xffffff)
+        //navigationBarAppearace.barTintColor =  GlobalConstants.uicolorFromHex(0x00524D)
+        
         //View controller-based status bar appearance added to Info.plist
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         

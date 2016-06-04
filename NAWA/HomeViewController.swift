@@ -17,7 +17,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
     @IBOutlet weak var getWeatherButton: UIButton!
     var states = [State]()
     var cities = [City]()
-    var weatherConditions = WeatherCondition?()
+    var primaryWeatherConditions = WeatherCondition?()
+    var secondaryWeatherConditions = WeatherCondition?()
+    var ternaryWeatherConditions = WeatherCondition?()
     
     override func viewDidAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -173,6 +175,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
         
+        //get primary weather
         openWeatherService.getCurrentWeather(cityTextField.text!, state:stateTextField.text!) { (result, success) in
             if success {
                 
@@ -180,13 +183,48 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
                 
                 userDefaults.synchronize()
                 
-                self.weatherConditions = result!
-                self.performSegueWithIdentifier("getWeather", sender: nil)
+                self.primaryWeatherConditions = result!
+                
+                //get secondary weather
+                openWeatherService.getCurrentWeather("Cupertino", state:"CA") { (result, success) in
+                    if success {
+                        
+                        let userDefaults = NSUserDefaults.standardUserDefaults()
+                        
+                        userDefaults.synchronize()
+                        
+                        self.secondaryWeatherConditions = result!
+                        
+                        //get ternary weather conditions
+                        openWeatherService.getCurrentWeather("Stone Mountain", state:"CA") { (result, success) in
+                            if success {
+                                
+                                let userDefaults = NSUserDefaults.standardUserDefaults()
+                                
+                                userDefaults.synchronize()
+                                
+                                self.ternaryWeatherConditions = result!
+                                self.performSegueWithIdentifier("getWeather", sender: nil)
+                                
+                            }
+                            else {
+                                //There was an error getting ternary location weather conditions
+                            }
+                            
+                        }
+                        
+                    }
+                    else {
+                        //There was an error getting secondary location weather conditions
+                    }
+                    
+                }
                 
             }
             else {
-                
+                //There was an error getting primary location weather conditions
             }
+
         }
 
     }
@@ -237,7 +275,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
             
             let destinationView = segue.destinationViewController as! WeatherCardsViewController
             
-            destinationView.currentConditions = self.weatherConditions
+            destinationView.currentPrimaryConditions = self.primaryWeatherConditions
+            destinationView.currentSecondaryConditions = self.secondaryWeatherConditions
+            destinationView.currentTernaryConditions = self.ternaryWeatherConditions
+
         }
     }
     

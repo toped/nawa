@@ -13,7 +13,9 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
     var weatherLocations = [String]()
     var chosenCellFrame = CGRect()
     var expander = ExpandedViewController?()
-    var currentConditions = WeatherCondition?()
+    var currentPrimaryConditions = WeatherCondition?()
+    var currentSecondaryConditions = WeatherCondition?()
+    var currentTernaryConditions = WeatherCondition?()
 
     @IBOutlet weak var weatherCardsTable: UITableView!
     
@@ -21,7 +23,9 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        weatherLocations = ["\(self.currentConditions!.cityName), \(self.currentConditions!.stateAbbreiviation)", "Cupertino, CA", "Mountain View, CA"];
+        weatherLocations = ["\(self.currentPrimaryConditions!.cityName), \(self.currentPrimaryConditions!.stateAbbreiviation)",
+                            "\(self.currentSecondaryConditions!.cityName), \(self.currentSecondaryConditions!.stateAbbreiviation)",
+                            "\(self.currentTernaryConditions!.cityName), \(self.currentTernaryConditions!.stateAbbreiviation)"];
         
         self.edgesForExtendedLayout = UIRectEdge.None
         self.navigationItem.title = "NAWA"
@@ -77,8 +81,12 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         
         let screenRect = UIScreen.mainScreen().bounds
         let screenHeight = screenRect.size.height
+        let navBarRect = self.navigationController?.navigationBar.bounds
+        let navBarHeight = navBarRect?.size.height
+        let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+
         
-        return (screenHeight-self.navigationController!.navigationBar.frame.size.height) / CGFloat(weatherLocations.count);
+        return (screenHeight - navBarHeight! - statusBarHeight) / CGFloat(weatherLocations.count);
     }
     
     
@@ -89,18 +97,24 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         cell.locationName.text = weatherLocations[indexPath.row]
         
         if indexPath.row == 0 {
-            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 1.0)
+            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
             cell.cellBackground.image = UIImage(named: "home-background")
             
-            cell.currentTemperature.text = "\(self.currentConditions!.temperature_fahrenheit)°"
+            cell.currentTemperature.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°"
         }
         else if indexPath.row == 1 {
-            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 1.0)
+            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
             cell.cellBackground.image = UIImage(named: "home-background2")
+            
+            cell.currentTemperature.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°"
+
         }
         else {
-            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 1.0)
+            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
             cell.cellBackground.image = UIImage(named: "home-background3")
+            
+            cell.currentTemperature.text = "\(self.currentTernaryConditions!.temperature_fahrenheit)°"
+
         }
         
         return cell
@@ -110,40 +124,56 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         
         tableView.deselectRowAtIndexPath(indexPath, animated: false) //deselect row so that color is the same when row collapses
         
+        //if !self.expander, initialize self.expander
         if (self.expander == nil) {
             self.expander = self.storyboard!.instantiateViewControllerWithIdentifier("Expander") as? ExpandedViewController
             self.expander!.delegate = self
         }
         
+        //add as childviewcontroller
         self.addChildViewController(self.expander!)
+        
+        //set the initial frame of the expander to be the same as the selected row
         self.expander!.view.frame = tableView.rectForRowAtIndexPath(indexPath)
         self.expander!.view.center = CGPointMake(self.expander!.view.center.x, self.expander!.view.center.y - tableView.contentOffset.y); // adjusts for the offset of the cell when you select it
+        
+        //save the chosenFrame
         self.chosenCellFrame = self.expander!.view.frame;
         
+        //customize the expanderview based on row
         if indexPath.row == 0 {
-            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 1.0)
+            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentConditions!.temperature_fahrenheit)°"
+            self.expander!.currentTemperatureLabel.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°"
         }
         else if indexPath.row == 1 {
-            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 1.0)
+            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background2")
+            self.expander!.currentTemperatureLabel.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°"
+
         }
         else {
-            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 1.0)
+            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background3")
+            self.expander!.currentTemperatureLabel.text = "\(self.currentTernaryConditions!.temperature_fahrenheit)°"
+
         }
-        
-        self.expander!.view.alpha = 0
+        self.expander!.bottomCell.backgroundColor = self.expander!.cell.backgroundColor
         let label = self.expander?.locationLabel
         label!.text = weatherLocations[indexPath.row];
+        
+        
+        //make the cell fully transparent.. will animate it back to fully opaque
+        self.expander!.view.alpha = 0
+        
+        //add the expander as a subview
         self.view.addSubview(self.expander!.view)
         
         //animate the view
         UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
             
             self.expander!.view.frame = tableView.frame
-            self.expander!.locationBackgroundImage.alpha = 0.200000002980232
+            self.expander!.locationBackgroundImage.alpha = 0.8
             self.expander!.view.alpha = 1
             self.expander!.view.backgroundColor = UIColor.init(colorLiteralRed: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0)
             
