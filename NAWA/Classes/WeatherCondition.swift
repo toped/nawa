@@ -13,6 +13,7 @@ class WeatherCondition: NSObject, NSCoding {
     var cityName:String = "N/A"
     var stateAbbreiviation:String = "N/A"
     var weatherDescription:String = "N/A"
+    var mainIcon:String = "N/A"
     
     //kelvins
     var temperature:String = "0"
@@ -34,7 +35,7 @@ class WeatherCondition: NSObject, NSCoding {
 
     }
     
-    init(city:String, state:String, description:String, temperature:String, temperatureMin:String, temperatureMax:String) {
+    init(city:String, state:String, description:String, mainIcon:String, temperature:String, temperatureMin:String, temperatureMax:String) {
         super.init()
         
         self.cityName = city
@@ -43,7 +44,8 @@ class WeatherCondition: NSObject, NSCoding {
         self.temperature = temperature
         self.temperatureMin = temperatureMin
         self.temperatureMax = temperatureMax
-        
+        self.mainIcon = mainIcon
+
         self.getTemperatureInFahrenheit()
         self.getTemperatureInCelsius()
     }
@@ -56,11 +58,13 @@ class WeatherCondition: NSObject, NSCoding {
         let temperature = aDecoder.decodeObjectForKey("temperature") as! String
         let temperatureMin = aDecoder.decodeObjectForKey("temperatureMin") as! String
         let temperatureMax = aDecoder.decodeObjectForKey("temperatureMax") as! String
+        let mainIcon = aDecoder.decodeObjectForKey("mainIcon") as! String
         
         self.init(
             city:cityName,
             state:stateAbbreiviation,
             description:weatherDescription,
+            mainIcon:mainIcon,
             temperature:temperature,
             temperatureMin:temperatureMin,
             temperatureMax:temperatureMax
@@ -72,6 +76,7 @@ class WeatherCondition: NSObject, NSCoding {
         aCoder.encodeObject(cityName, forKey: "cityName")
         aCoder.encodeObject(stateAbbreiviation, forKey: "stateAbbreiviation")
         aCoder.encodeObject(weatherDescription, forKey: "weatherDescription")
+        aCoder.encodeObject(mainIcon, forKey: "mainIcon")
         aCoder.encodeObject(temperature, forKey: "temperature")
         aCoder.encodeObject(temperatureMin, forKey: "temperatureMin")
         aCoder.encodeObject(temperatureMax, forKey: "temperatureMax")

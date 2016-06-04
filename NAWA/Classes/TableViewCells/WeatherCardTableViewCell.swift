@@ -13,7 +13,8 @@ class WeatherCardTableViewCell: UITableViewCell {
     @IBOutlet weak var cellBackground: UIImageView!
     @IBOutlet weak var locationName: UILabel!
     @IBOutlet weak var currentTemperature: UILabel!
-    
+    @IBOutlet weak var weatherIcon: UIImageView!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

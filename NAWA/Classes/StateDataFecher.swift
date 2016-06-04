@@ -18,7 +18,7 @@ class StateDataFecher: NSObject {
     
     func getCitiesForState(state: String, completion: (result: [City]?, success: Bool) -> Void) {
         
-        let URL = NSURL(string: "http://api.sba.gov/geodata/city_data_for_state_of/" + state + ".json")!
+        let URL = NSURL(string: "http://topedaramola.com/apis/worlds/apiv1/state/index?method=getCitiesForState&state_abbr=" + state)!
         print("got back: \(URL)")
         let URLRequest = NSMutableURLRequest(URL: URL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
@@ -34,20 +34,22 @@ class StateDataFecher: NSObject {
             case .Success(let JSON):
                 print("Success with JSON: \(JSON)")
                 
-                let response = JSON as! NSArray
+                let response = JSON as! [String: AnyObject]
+                let resoinseCities = response["Cities"] as! NSArray
                 var cities = [City]()
                 
-                for item in response {
+                for item in resoinseCities {
                    
-                    guard let city = item as? [String: AnyObject],
-                        let name = city["name"] as? String,
-                        let latitude = city["primary_latitude"] as? String,
-                        let longitude = city["primary_longitude"] as? String else {
+                    guard let name = item["city"] as? String,
+                        let latitude = item["latitude"] as? Float,
+                        let longitude = item["longitude"] as? Float else {
+                            print("un-successful");
                             return;
                     }
                     
-                    let currentCity = City.init(name: name, stateAbbriviation: state, latitude: latitude, longitude: longitude)
+                    let currentCity = City.init(name: name, stateAbbriviation: state, latitude: "\(latitude)", longitude: "\(longitude)")
                     cities.append(currentCity)
+                    
                 }
                 
                 completion(result:cities, success:true)

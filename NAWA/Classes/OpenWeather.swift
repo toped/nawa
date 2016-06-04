@@ -58,11 +58,19 @@ class OpenWeather: NSObject {
                         print("Request parse failed with gaurd error")
                         return;
                 }
+                
+                guard let weather = response["weather"]?.objectAtIndex(0) as? [String: AnyObject],
+                    let icon = weather["icon"] else {
+                        print("Request parse failed with gaurd error")
+                        return;
+                }
+                
                 print(currentTemp)
                 
-                let weatherConditions = WeatherCondition.init(city: city, state: state, description:"", temperature:"\(currentTemp)", temperatureMin:"\(currentTempMin)", temperatureMax:"\(currentTempMax)")
+                let weatherConditions = WeatherCondition.init(city: city, state: state, description:"", mainIcon:icon as! String, temperature:"\(currentTemp)", temperatureMin:"\(currentTempMin)", temperatureMax:"\(currentTempMax)")
                 
                 completion(result:weatherConditions, success:true)
+                
                 
                 
             case .Failure(let error):

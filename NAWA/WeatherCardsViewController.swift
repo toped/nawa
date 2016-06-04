@@ -15,7 +15,7 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
     var expander = ExpandedViewController?()
     var currentPrimaryConditions = WeatherCondition?()
     var currentSecondaryConditions = WeatherCondition?()
-    var currentTernaryConditions = WeatherCondition?()
+    var currentTertiaryConditions = WeatherCondition?()
 
     @IBOutlet weak var weatherCardsTable: UITableView!
     
@@ -25,7 +25,7 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         // Do any additional setup after loading the view.
         weatherLocations = ["\(self.currentPrimaryConditions!.cityName), \(self.currentPrimaryConditions!.stateAbbreiviation)",
                             "\(self.currentSecondaryConditions!.cityName), \(self.currentSecondaryConditions!.stateAbbreiviation)",
-                            "\(self.currentTernaryConditions!.cityName), \(self.currentTernaryConditions!.stateAbbreiviation)"];
+                            "\(self.currentTertiaryConditions!.cityName), \(self.currentTertiaryConditions!.stateAbbreiviation)"];
         
         self.edgesForExtendedLayout = UIRectEdge.None
         self.navigationItem.title = "NAWA"
@@ -100,20 +100,24 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
             cell.cellBackground.image = UIImage(named: "home-background")
             
-            cell.currentTemperature.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°"
+            cell.currentTemperature.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°F"
+            cell.weatherIcon.image = UIImage(named:"\(self.currentPrimaryConditions!.mainIcon).png")
+
         }
         else if indexPath.row == 1 {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
             cell.cellBackground.image = UIImage(named: "home-background2")
             
-            cell.currentTemperature.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°"
+            cell.currentTemperature.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°F"
+            cell.weatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions!.mainIcon).png")
 
         }
         else {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
             cell.cellBackground.image = UIImage(named: "home-background3")
             
-            cell.currentTemperature.text = "\(self.currentTernaryConditions!.temperature_fahrenheit)°"
+            cell.currentTemperature.text = "\(self.currentTertiaryConditions!.temperature_fahrenheit)°F"
+            cell.weatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions!.mainIcon).png")
 
         }
         
@@ -144,19 +148,20 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         if indexPath.row == 0 {
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°"
+            self.expander!.currentTemperatureLabel.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°F"
+            self.expander!.mainWeatherIcon.image = UIImage(named:"\(self.currentPrimaryConditions!.mainIcon).png")
         }
         else if indexPath.row == 1 {
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background2")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°"
-
+            self.expander!.currentTemperatureLabel.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°F"
+            self.expander!.mainWeatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions!.mainIcon).png")
         }
         else {
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background3")
-            self.expander!.currentTemperatureLabel.text = "\(self.currentTernaryConditions!.temperature_fahrenheit)°"
-
+            self.expander!.currentTemperatureLabel.text = "\(self.currentTertiaryConditions!.temperature_fahrenheit)°F"
+            self.expander!.mainWeatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions!.mainIcon).png")
         }
         self.expander!.bottomCell.backgroundColor = self.expander!.cell.backgroundColor
         let label = self.expander?.locationLabel
@@ -170,7 +175,7 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         self.view.addSubview(self.expander!.view)
         
         //animate the view
-        UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        UIView.animateWithDuration(0.55, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
             
             self.expander!.view.frame = tableView.frame
             self.expander!.locationBackgroundImage.alpha = 0.8
@@ -193,12 +198,14 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         self.expander!.locationLabel.text = ""
 
         //animate the view
-        UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        UIView.animateWithDuration(0.55, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
             
             self.expander!.view.frame = self.chosenCellFrame
             self.expander!.locationBackgroundImage.alpha = 0
             self.expander!.view.alpha = 0
-            self.expander!.view.backgroundColor = self.expander!.cell.backgroundColor
+            self.expander!.view.backgroundColor = UIColor.init(colorLiteralRed: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+
+
             
             }, completion: { (finished: Bool) -> Void in
                 
