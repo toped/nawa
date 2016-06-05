@@ -60,11 +60,17 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func dismissView() {
+    func dismissView(state: String?) {
         
         // Clear the Search bar text
         self.searchController.active = false;
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismissViewControllerAnimated(true, completion: {
+        
+            if state != nil {
+                self.delegate?.updateViewWithState(state!)
+            }
+            
+        })
         
     }
     
@@ -121,9 +127,7 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             selectedState = states[indexPath.row]
         }
         
-        self.delegate?.updateViewWithState(selectedState.stateAbbriviation)
-        
-        self.dismissView()
+        self.dismissView(selectedState.stateAbbriviation)
 
     }
     

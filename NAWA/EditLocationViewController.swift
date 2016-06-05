@@ -130,6 +130,7 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
                 
                 self.weatherConditions = result!
                 self.delegate?.updateViewWithNewWeatherData(self.weatherConditions!)
+                
                 self.dismissView()
             }
             else {

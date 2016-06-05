@@ -60,11 +60,17 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func dismissView() {
+    func dismissView(city: String?) {
         
         // Clear the Search bar text
         self.searchController.active = false;
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismissViewControllerAnimated(true, completion: {
+            
+            if city != nil {
+                self.delegate?.updateViewWithCity(city!)
+            }
+            
+        })
         
     }
     
@@ -121,9 +127,8 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             selectedCity = cities[indexPath.row]
         }
         
-        self.delegate?.updateViewWithCity(selectedCity.name)
         
-        self.dismissView()
+        self.dismissView(selectedCity.name)
         
     }
     

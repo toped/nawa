@@ -126,7 +126,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
     
     func getWeatherAtLocation() {
         
-        let alertController = UIAlertController(title: "Change Primary Location", message: "Would you like to update primary weather using your current location?", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Update Primary Location", message: "Would you like to update primary weather using your current location?", preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
             // ...
