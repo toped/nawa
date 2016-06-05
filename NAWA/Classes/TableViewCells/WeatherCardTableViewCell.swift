@@ -14,6 +14,7 @@ class WeatherCardTableViewCell: UITableViewCell {
     @IBOutlet weak var locationName: UILabel!
     @IBOutlet weak var currentTemperature: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet weak var currentLocationLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

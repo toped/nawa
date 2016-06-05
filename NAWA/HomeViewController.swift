@@ -128,6 +128,10 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
                             self.cityTextField.text = placemark.locality
                             self.stateTextField.text = placemark.administrativeArea
                             
+                            let userDefaults = NSUserDefaults.standardUserDefaults()
+                            userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
+                            userDefaults.synchronize()
+                            
                             self.getWeather(self)
                             
                         }

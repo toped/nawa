@@ -19,6 +19,7 @@ struct GlobalConstants {
     static let SECONDARY_STATE_KEY      = "SECONDARY_STATE_KEY"
     static let TERTIARY_CITY_KEY        = "TERTIARY_CITY_KEY"
     static let TERTIARY_STATE_KEY       = "TERTIARY_STATE_KEY"
+    static let USING_CURRENT_LOCATION   = "USING_CURRENT_LOCATION"
 
     //TableViewCell Identifiers
     static let WEATHER_CELL_IDENTIFIER  = "WEATHER_CELL"

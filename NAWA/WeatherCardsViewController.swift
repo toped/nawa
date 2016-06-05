@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import CoreLocation
 
-class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
+
+class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, ExpandedCellDelegate {
     
+    var locationManager:CLLocationManager!
+
     var weatherLocations = [String]()
     var chosenCellFrame = CGRect()
     var expander = ExpandedViewController?()
@@ -63,7 +67,53 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         
         navigationItem.rightBarButtonItems = [changeLocationBtn, currentLocationBtn]
         
+    }
+    
+    func configureLocationServices() {
         
+        //Set up the location services
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.distanceFilter = 10; // 10m
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == .AuthorizedWhenInUse {
+            if CLLocationManager.isMonitoringAvailableForClass(CLBeaconRegion.self) {
+                if CLLocationManager.isRangingAvailable() {
+                    //self.currentLat = "\(self.locationManager.location?.coordinate.latitude)"
+                    //self.currentLon = "\(self.locationManager.location?.coordinate.longitude)"
+                    
+                    let geocoder = CLGeocoder()
+                    geocoder.reverseGeocodeLocation(self.locationManager.location!, completionHandler: { (placemarks, e) -> Void in
+                        if e != nil {
+                            print("Error:  \(e!.localizedDescription)")
+                        } else {
+                            let placemark = placemarks!.last! as CLPlacemark
+                            
+                            let userDefaults = NSUserDefaults.standardUserDefaults()
+                            userDefaults.setObject(placemark.locality, forKey:GlobalConstants.PRIMARY_CITY_KEY)
+                            userDefaults.setObject(placemark.administrativeArea, forKey:GlobalConstants.PRIMARY_STATE_KEY)
+                            
+                            userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
+                            userDefaults.synchronize()
+                            
+                            self.weatherLocations[0] = "\(placemark.locality!), \(placemark.administrativeArea!)"
+                            
+                            self.getWeather(self)
+                            
+                        }
+                    })
+                    
+                    
+                    //self.getWeather("locationManager")
+                }
+            }
+        }
     }
     
     func changeLocation() {
@@ -81,7 +131,8 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         alertController.addAction(cancelAction)
         
         let OKAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
-            // ...
+            self.configureLocationServices()
+            return
         }
         alertController.addAction(OKAction)
         
@@ -187,6 +238,15 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
             
             cell.currentTemperature.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°F"
             cell.weatherIcon.image = UIImage(named:"\(self.currentPrimaryConditions!.mainIcon).png")
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            
+            if userDefaults.boolForKey(GlobalConstants.USING_CURRENT_LOCATION){
+                cell.currentLocationLabel.text = "current location"
+            }
+            else {
+                cell.currentLocationLabel.text = ""
+            }
 
         }
         else if indexPath.row == 1 {
@@ -195,6 +255,8 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
             
             cell.currentTemperature.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°F"
             cell.weatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions!.mainIcon).png")
+            
+            cell.currentLocationLabel.text = ""
 
         }
         else {
@@ -203,6 +265,8 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
             
             cell.currentTemperature.text = "\(self.currentTertiaryConditions!.temperature_fahrenheit)°F"
             cell.weatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions!.mainIcon).png")
+
+            cell.currentLocationLabel.text = ""
 
         }
         

@@ -325,9 +325,6 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q58-xt-cl5">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="0.0" y="-3" width="320" height="128"/>
-                                                    </variation>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" alpha="0.65000000000000002" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="01d" translatesAutoresizingMaskIntoConstraints="NO" id="ciA-Da-Njx">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
@@ -341,8 +338,7 @@
                                                             <exclude reference="Buo-YA-6Up"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="96" y="29" width="90" height="85"/>
+                                                    <variation key="widthClass=compact">
                                                         <mask key="constraints">
                                                             <include reference="Buo-YA-6Up"/>
                                                         </mask>
@@ -353,18 +349,18 @@
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="45"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="209.5" y="52" width="93.5" height="62"/>
-                                                    </variation>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cupertino" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kij-JO-wED">
                                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="27"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="29" y="16" width="283" height="37"/>
-                                                    </variation>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="current location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="spI-a5-Cjz">
+                                                    <rect key="frame" x="-42" y="-21" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
@@ -381,6 +377,7 @@
                                                 </constraint>
                                                 <constraint firstItem="ciA-Da-Njx" firstAttribute="bottom" secondItem="0k1-Oc-aM1" secondAttribute="bottomMargin" id="R13-Tx-hRF"/>
                                                 <constraint firstItem="Q58-xt-cl5" firstAttribute="centerY" secondItem="0k1-Oc-aM1" secondAttribute="centerY" id="SIu-tS-9sz"/>
+                                                <constraint firstItem="spI-a5-Cjz" firstAttribute="top" secondItem="kij-JO-wED" secondAttribute="bottom" constant="-6" id="keN-7x-5hA"/>
                                                 <constraint firstItem="ciA-Da-Njx" firstAttribute="top" secondItem="kij-JO-wED" secondAttribute="bottom" constant="7" id="lmv-Nn-K1e">
                                                     <variation key="widthClass=compact" constant="-24"/>
                                                 </constraint>
@@ -395,6 +392,7 @@
                                                 <constraint firstItem="Q58-xt-cl5" firstAttribute="centerX" secondItem="kij-JO-wED" secondAttribute="centerX" id="yIV-gd-MAt">
                                                     <variation key="widthClass=compact" constant="-10.5"/>
                                                 </constraint>
+                                                <constraint firstItem="spI-a5-Cjz" firstAttribute="leading" secondItem="kij-JO-wED" secondAttribute="leading" id="yaY-S0-W1f"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="subviews">
@@ -402,21 +400,24 @@
                                                     <exclude reference="ciA-Da-Njx"/>
                                                     <exclude reference="ytr-yO-Cc4"/>
                                                     <exclude reference="kij-JO-wED"/>
+                                                    <exclude reference="spI-a5-Cjz"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <exclude reference="APm-ni-4tY"/>
-                                                    <exclude reference="xZ5-Yj-DD5"/>
-                                                    <exclude reference="DBg-Qa-xSy"/>
-                                                    <exclude reference="Njg-N9-zGu"/>
-                                                    <exclude reference="nif-TD-qfO"/>
-                                                    <exclude reference="pe2-CM-c8L"/>
                                                     <exclude reference="62I-xu-Nkz"/>
                                                     <exclude reference="LJt-5M-LEn"/>
                                                     <exclude reference="SIu-tS-9sz"/>
                                                     <exclude reference="xLk-Hi-GLg"/>
                                                     <exclude reference="yIV-gd-MAt"/>
+                                                    <exclude reference="APm-ni-4tY"/>
+                                                    <exclude reference="xZ5-Yj-DD5"/>
+                                                    <exclude reference="keN-7x-5hA"/>
+                                                    <exclude reference="yaY-S0-W1f"/>
                                                     <exclude reference="R13-Tx-hRF"/>
                                                     <exclude reference="lmv-Nn-K1e"/>
+                                                    <exclude reference="DBg-Qa-xSy"/>
+                                                    <exclude reference="Njg-N9-zGu"/>
+                                                    <exclude reference="nif-TD-qfO"/>
+                                                    <exclude reference="pe2-CM-c8L"/>
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
@@ -425,26 +426,30 @@
                                                     <include reference="ciA-Da-Njx"/>
                                                     <include reference="ytr-yO-Cc4"/>
                                                     <include reference="kij-JO-wED"/>
+                                                    <include reference="spI-a5-Cjz"/>
                                                 </mask>
                                                 <mask key="constraints">
-                                                    <include reference="APm-ni-4tY"/>
-                                                    <include reference="xZ5-Yj-DD5"/>
-                                                    <include reference="DBg-Qa-xSy"/>
-                                                    <include reference="Njg-N9-zGu"/>
-                                                    <include reference="nif-TD-qfO"/>
-                                                    <include reference="pe2-CM-c8L"/>
                                                     <include reference="62I-xu-Nkz"/>
                                                     <include reference="LJt-5M-LEn"/>
                                                     <include reference="SIu-tS-9sz"/>
                                                     <include reference="xLk-Hi-GLg"/>
                                                     <include reference="yIV-gd-MAt"/>
+                                                    <include reference="APm-ni-4tY"/>
+                                                    <include reference="xZ5-Yj-DD5"/>
+                                                    <include reference="keN-7x-5hA"/>
+                                                    <include reference="yaY-S0-W1f"/>
                                                     <include reference="R13-Tx-hRF"/>
                                                     <include reference="lmv-Nn-K1e"/>
+                                                    <include reference="DBg-Qa-xSy"/>
+                                                    <include reference="Njg-N9-zGu"/>
+                                                    <include reference="nif-TD-qfO"/>
+                                                    <include reference="pe2-CM-c8L"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="cellBackground" destination="Q58-xt-cl5" id="4nF-rK-kV3"/>
+                                            <outlet property="currentLocationLabel" destination="spI-a5-Cjz" id="hSF-cC-tkP"/>
                                             <outlet property="currentTemperature" destination="ytr-yO-Cc4" id="kGn-6a-QJu"/>
                                             <outlet property="locationName" destination="kij-JO-wED" id="JQm-q2-H0h"/>
                                             <outlet property="weatherIcon" destination="ciA-Da-Njx" id="tt6-b0-u13"/>
