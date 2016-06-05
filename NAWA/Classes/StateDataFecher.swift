@@ -19,7 +19,7 @@ class StateDataFecher: NSObject {
     func getCitiesForState(state: String, completion: (result: [City]?, success: Bool) -> Void) {
         
         let URL = NSURL(string: "http://topedaramola.com/apis/worlds/apiv1/state/index?method=getCitiesForState&state_abbr=" + state)!
-        print("got back: \(URL)")
+        //print("got back: \(URL)")
         let URLRequest = NSMutableURLRequest(URL: URL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
         
@@ -32,7 +32,7 @@ class StateDataFecher: NSObject {
             
             switch response.result {
             case .Success(let JSON):
-                print("Success with JSON: \(JSON)")
+                //print("Success with JSON: \(JSON)")
                 
                 let response = JSON as! [String: AnyObject]
                 let resoinseCities = response["Cities"] as! NSArray

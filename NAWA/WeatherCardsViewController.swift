@@ -58,10 +58,10 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         navigationItem.leftBarButtonItem = backButton
         
         //set right bar button
-        let changeLocationBtn = UIBarButtonItem(image: UIImage(named: "settings-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
+        let changeLocationBtn = UIBarButtonItem(image: UIImage(named: "refresh-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
                                                 style: UIBarButtonItemStyle.Plain,
                                                 target: self,
-                                                action: #selector(self.changeLocation))
+                                                action: #selector(self.refreshWeather))
         
         let currentLocationBtn = UIBarButtonItem(image: UIImage(named: "current-location-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
                                                 style: UIBarButtonItemStyle.Plain,
@@ -70,6 +70,16 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         
         navigationItem.rightBarButtonItems = [changeLocationBtn, currentLocationBtn]
         
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)),
+            name: UIApplicationDidBecomeActiveNotification,
+            object: nil)
+        
+    }
+    
+    func applicationDidBecomeActive(notification: NSNotification) {
+        self.getWeather(self)
     }
     
     func configureLocationServices() {
@@ -119,8 +129,9 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         }
     }
     
-    func changeLocation() {
+    func refreshWeather() {
         
+        self.getWeather(self)
         
     }
     

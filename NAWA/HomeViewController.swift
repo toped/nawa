@@ -214,7 +214,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         
         //Create an instance of State for each record in plist file
         for stateRecord in statesDictionary! {
-            print(stateRecord)
+            //print(stateRecord)
            //Create Dictionary from agent record
             let stateDictionary: NSDictionary = (statesDictionary?.objectForKey(stateRecord.key)) as! NSDictionary
             

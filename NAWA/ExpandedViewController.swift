@@ -78,7 +78,7 @@ class ExpandedViewController: UIViewController {
         openWeatherService.get5DayForcast((self.currentWeatherConditions?.cityName)!, state:(self.currentWeatherConditions?.stateAbbreiviation)!) { (result, success) in
             if success {
                 
-                print(result!)
+                //print(result!)
                 
                 let day1Forecast = result![1] as DailyForecast
                 let day2Forecast = result![2] as DailyForecast

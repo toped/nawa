@@ -60,7 +60,16 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func dismissView(city: String?) {
+    // needed a second dismiss function to avoid error: (-[UIBarButtonItem copyWithZone:]: unrecognized selector sent to instance)
+    func dismissView() {
+        
+        // Clear the Search bar text
+        self.searchController.active = false;
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    func dismissViewWith(city: String?) {
         
         // Clear the Search bar text
         self.searchController.active = false;
@@ -128,7 +137,7 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         
-        self.dismissView(selectedCity.name)
+        self.dismissViewWith(selectedCity.name)
         
     }
     

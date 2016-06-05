@@ -60,7 +60,16 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func dismissView(state: String?) {
+    // needed a second dismiss function to avoid error: (-[UIBarButtonItem copyWithZone:]: unrecognized selector sent to instance)
+    func dismissView() {
+        
+        // Clear the Search bar text
+        self.searchController.active = false;
+        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+    func dismissViewWith(state: String?) {
         
         // Clear the Search bar text
         self.searchController.active = false;
@@ -127,7 +136,7 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             selectedState = states[indexPath.row]
         }
         
-        self.dismissView(selectedState.stateAbbriviation)
+        self.dismissViewWith(selectedState.stateAbbriviation)
 
     }
     

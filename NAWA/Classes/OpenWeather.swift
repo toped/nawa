@@ -34,7 +34,7 @@ class OpenWeather: NSObject {
 
         let searchURL : NSURL = NSURL(string: urlStr)!
         
-        print("got back: \(searchURL)")
+        //print("got back: \(searchURL)")
         
         let URLRequest = NSMutableURLRequest(URL: searchURL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
@@ -65,7 +65,7 @@ class OpenWeather: NSObject {
                         return;
                 }
                 
-                print(currentTemp)
+                //print(currentTemp)
                 
                 let weatherConditions = WeatherCondition.init(city: city, state: state, description:"", mainIcon:icon as! String, temperature:"\(currentTemp)", temperatureMin:"\(currentTempMin)", temperatureMax:"\(currentTempMax)")
                 
@@ -92,7 +92,7 @@ class OpenWeather: NSObject {
         
         let searchURL : NSURL = NSURL(string: urlStr)!
         
-        print("got back forecast: \(searchURL)")
+        //print("got back forecast: \(searchURL)")
         
         let URLRequest = NSMutableURLRequest(URL: searchURL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
@@ -105,7 +105,7 @@ class OpenWeather: NSObject {
             
             switch response.result {
             case .Success(let JSON):
-                print("Success with JSON: \(JSON)")
+                //print("Success with JSON: \(JSON)")
                 
                 let response = JSON as! [String: AnyObject]
                 let forecasts = response["list"] as! NSArray

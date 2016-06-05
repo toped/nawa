@@ -110,11 +110,26 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
     
     func selectCity() {
         
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("Cities") as? CitiesViewController
-        vc?.delegate = self
-        vc?.cities = self.cities
-        let vc_nav = UINavigationController(rootViewController: vc!)
-        self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+        if (self.cities.count > 0) {
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("Cities") as? CitiesViewController
+            vc?.delegate = self
+            vc?.cities = self.cities
+            let vc_nav = UINavigationController(rootViewController: vc!)
+            self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+        }
+        else {
+            let alertController = UIAlertController(title: "Whoops", message: "Cities are still loading. Please try again.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
+            }
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+
+        }
         
     }
 
@@ -164,7 +179,7 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         
         //Create an instance of State for each record in plist file
         for stateRecord in statesDictionary! {
-            print(stateRecord)
+            //print(stateRecord)
             //Create Dictionary from agent record
             let stateDictionary: NSDictionary = (statesDictionary?.objectForKey(stateRecord.key)) as! NSDictionary
             
