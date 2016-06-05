@@ -14,7 +14,7 @@ import CoreLocation
 class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, StateSelectionDelegate, CitySelectionDelegate {
     
     var locationManager:CLLocationManager!
-
+    
     @IBOutlet weak var locationInputView: UIView!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var stateTextField: UITextField!
@@ -73,10 +73,10 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
             self.getWeather("viewDidLoad")
             
         }
-
+        
         configureTapGestures()
         configureUI()
-
+        
         //Populate the cities array
         self.populateStates()
     }
@@ -84,7 +84,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
     func configureTapGestures() {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-       
+        
         self.view.addGestureRecognizer(tap)
         
     }
@@ -117,33 +117,49 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
                 if CLLocationManager.isRangingAvailable() {
                     //self.currentLat = "\(self.locationManager.location?.coordinate.latitude)"
                     //self.currentLon = "\(self.locationManager.location?.coordinate.longitude)"
- 
-                    let geocoder = CLGeocoder()
-                    geocoder.reverseGeocodeLocation(self.locationManager.location!, completionHandler: { (placemarks, e) -> Void in
-                        if e != nil {
-                            print("Error:  \(e!.localizedDescription)")
-                        } else {
-                            let placemark = placemarks!.last! as CLPlacemark
-                            
-                            self.cityTextField.text = placemark.locality
-                            self.stateTextField.text = placemark.administrativeArea
-                            
-                            let userDefaults = NSUserDefaults.standardUserDefaults()
-                            userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
-                            userDefaults.synchronize()
-                            
-                            self.getWeather(self)
-                            
+                    
+                    if GlobalConstants.hasConnectivity() {
+                        
+                        let geocoder = CLGeocoder()
+                        geocoder.reverseGeocodeLocation(self.locationManager.location!, completionHandler: { (placemarks, e) -> Void in
+                            if e != nil {
+                                print("Error:  \(e!.localizedDescription)")
+                            } else {
+                                let placemark = placemarks!.last! as CLPlacemark
+                                
+                                self.cityTextField.text = placemark.locality
+                                self.stateTextField.text = placemark.administrativeArea
+                                
+                                let userDefaults = NSUserDefaults.standardUserDefaults()
+                                userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
+                                userDefaults.synchronize()
+                                
+                                self.getWeather(self)
+                                
+                            }
+                        })
+                    }
+                    else {
+                        
+                        let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+                        
+                        let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                            // ...
                         }
-                    })
+                        alertController.addAction(cancelAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
+                        
+                        
+                    }
                     
-                    
-                    //self.getWeather("locationManager")
                 }
             }
         }
     }
-
+    
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         if textField == self.stateTextField {
@@ -168,7 +184,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
                 self.presentViewController(alertController, animated: true) {
                     // ...
                 }
-
+                
             }
             
             return false
@@ -215,7 +231,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         //Create an instance of State for each record in plist file
         for stateRecord in statesDictionary! {
             //print(stateRecord)
-           //Create Dictionary from agent record
+            //Create Dictionary from agent record
             let stateDictionary: NSDictionary = (statesDictionary?.objectForKey(stateRecord.key)) as! NSDictionary
             
             //Init the CountyAgent
@@ -226,9 +242,9 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
             
             //Add county agent to countyAgents array
             states.append(state)
- 
+            
         }
-       
+        
         //Sort the array of states stateAbbriviation
         states.sortInPlace({ $0.stateAbbriviation < $1.stateAbbriviation })
         
@@ -236,7 +252,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         let encodedData = NSKeyedArchiver.archivedDataWithRootObject(states)
         userDefaults.setObject(encodedData, forKey:GlobalConstants.STATES_KEY)
         userDefaults.synchronize()
- 
+        
     }
     
     func loadStatesPlistFromBundle() {
@@ -258,7 +274,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         }
     }
     
-
+    
     @IBAction func getWeather(sender: AnyObject) {
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
@@ -278,50 +294,69 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
             
         }
         
-        //get primary weather
-        openWeatherService.getCurrentWeather(self.primaryCity!, state:self.primaryState!) { (result, success) in
-            if success {
-                
-                self.primaryWeatherConditions = result!
-                
-                //get secondary weather
-                openWeatherService.getCurrentWeather(self.secondaryCity!, state:self.secondaryState!) { (result, success) in
-                    if success {
-                        
-                        self.secondaryWeatherConditions = result!
-                        
-                        
-                        //get tertiary weather conditions
-                        openWeatherService.getCurrentWeather(self.tertiaryCity!, state:self.tertiaryState!) { (result, success) in
-                            if success {
+        if GlobalConstants.hasConnectivity() {
+            
+            //get primary weather
+            openWeatherService.getCurrentWeather(self.primaryCity!, state:self.primaryState!) { (result, success) in
+                if success {
+                    
+                    self.primaryWeatherConditions = result!
+                    
+                    //get secondary weather
+                    openWeatherService.getCurrentWeather(self.secondaryCity!, state:self.secondaryState!) { (result, success) in
+                        if success {
+                            
+                            self.secondaryWeatherConditions = result!
+                            
+                            
+                            //get tertiary weather conditions
+                            openWeatherService.getCurrentWeather(self.tertiaryCity!, state:self.tertiaryState!) { (result, success) in
+                                if success {
+                                    
+                                    self.tertiaryWeatherConditions = result!
+                                    
+                                    
+                                    UIView.setAnimationsEnabled(shouldAnimate)
+                                    self.performSegueWithIdentifier("getWeather", sender: nil)
+                                    
+                                }
+                                else {
+                                    //There was an error getting tertiary location weather conditions
+                                }
                                 
-                                self.tertiaryWeatherConditions = result!
-                                
-                                
-                                UIView.setAnimationsEnabled(shouldAnimate)
-                                self.performSegueWithIdentifier("getWeather", sender: nil)
-                                
-                            }
-                            else {
-                                //There was an error getting tertiary location weather conditions
                             }
                             
                         }
+                        else {
+                            //There was an error getting secondary location weather conditions
+                        }
                         
-                    }
-                    else {
-                        //There was an error getting secondary location weather conditions
                     }
                     
                 }
+                else {
+                    //There was an error getting primary location weather conditions
+                }
                 
             }
-            else {
-                //There was an error getting primary location weather conditions
-            }
-
+            
         }
-
+        else {
+            
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
+            }
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+            
+            
+        }
+        
     }
     
     
@@ -337,20 +372,36 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         
         let stateInfo = StateDataFecher.init()
         
-        stateInfo.getCitiesForState(state, completion: { (result, success) in
+        if GlobalConstants.hasConnectivity() {
+            stateInfo.getCitiesForState(state, completion: { (result, success) in
+                
+                if success {
+                    
+                    self.cities = result!
+                    
+                }
+                else {
+                    
+                }
+                
+            })
+        }
+        else {
             
-            if success {
-                
-                self.cities = result!
-                
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
             }
-            else {
-                
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
             }
             
-        })
+            
+        }
         
-    
     }
     
     func updateViewWithCity(city:String) {
@@ -364,7 +415,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "getWeather" {
             
@@ -382,7 +433,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFie
             userDefaults.setObject(self.tertiaryWeatherConditions?.cityName, forKey:GlobalConstants.TERTIARY_CITY_KEY)
             userDefaults.setObject(self.tertiaryWeatherConditions?.stateAbbreiviation, forKey:GlobalConstants.TERTIARY_STATE_KEY)
             userDefaults.synchronize()
-
+            
         }
     }
     

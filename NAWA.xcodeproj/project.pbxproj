@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		941E21F31D03DBE0004EA177 /* EditLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941E21F21D03DBE0004EA177 /* EditLocationViewController.swift */; };
+		941E21FD1D048B6A004EA177 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 941E21FC1D048B6A004EA177 /* Reachability.m */; };
 		942299D31CF15650004DA301 /* StatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942299D21CF15650004DA301 /* StatesViewController.swift */; };
 		9436C75C1CFD485D0038BCD1 /* states.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9436C75B1CFD485D0038BCD1 /* states.plist */; };
 		945CDD621CF14E2D0031CA9C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945CDD611CF14E2D0031CA9C /* State.swift */; };
@@ -124,6 +125,9 @@
 
 /* Begin PBXFileReference section */
 		941E21F21D03DBE0004EA177 /* EditLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLocationViewController.swift; sourceTree = "<group>"; };
+		941E21FB1D048B6A004EA177 /* NAWA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NAWA-Bridging-Header.h"; sourceTree = "<group>"; };
+		941E21FC1D048B6A004EA177 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = Libraries/Reachability/Reachability.m; sourceTree = "<group>"; };
+		941E21FE1D048B8A004EA177 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = Libraries/Reachability/Reachability.h; sourceTree = "<group>"; };
 		942299D21CF15650004DA301 /* StatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesViewController.swift; sourceTree = "<group>"; };
 		9436C75B1CFD485D0038BCD1 /* states.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = states.plist; sourceTree = "<group>"; };
 		945CDD611CF14E2D0031CA9C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = State.swift; path = Classes/State.swift; sourceTree = "<group>"; };
@@ -179,6 +183,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		941E21FF1D048BA6004EA177 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				941E21FC1D048B6A004EA177 /* Reachability.m */,
+				941E21FE1D048B8A004EA177 /* Reachability.h */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 		94FFB8601CF0CA3B009F12DD = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +226,7 @@
 				94FFB8751CF0CA3C009F12DD /* LaunchScreen.storyboard */,
 				94FFB8821CF0E842009F12DD /* GlobalConstants.swift */,
 				94FFB8781CF0CA3C009F12DD /* Info.plist */,
+				941E21FB1D048B6A004EA177 /* NAWA-Bridging-Header.h */,
 			);
 			path = NAWA;
 			sourceTree = "<group>";
@@ -243,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				94FFB8C51CF13565009F12DD /* AlamoFire */,
+				941E21FF1D048BA6004EA177 /* Reachability */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -457,6 +472,7 @@
 				94FFB86D1CF0CA3C009F12DD /* AppDelegate.swift in Sources */,
 				94FFB9031CF135B3009F12DD /* Timeline.swift in Sources */,
 				94FFB90C1CF13819009F12DD /* OpenWeather.swift in Sources */,
+				941E21FD1D048B6A004EA177 /* Reachability.m in Sources */,
 				94FFB9041CF135B3009F12DD /* Upload.swift in Sources */,
 				94FFB8F51CF135B3009F12DD /* Error.swift in Sources */,
 				94FFB8F31CF135B3009F12DD /* Alamofire.swift in Sources */,
@@ -584,6 +600,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -592,6 +609,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.topedaram.NAWA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "NAWA/NAWA-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -599,6 +618,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -607,6 +627,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.topedaram.NAWA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "NAWA/NAWA-Bridging-Header.h";
 			};
 			name = Release;
 		};

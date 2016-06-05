@@ -40,7 +40,7 @@ class ExpandedViewController: UIViewController {
     @IBOutlet weak var day4Temp: UILabel!
     @IBOutlet weak var day5Temp: UILabel!
     
-
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -53,16 +53,16 @@ class ExpandedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         self.locationBackgroundImage.clipsToBounds = true
         
     }
-
+    
     @IBAction func collapseBackToTableView(sender: AnyObject) {
         
         delegate!.expandedCellWillCollapse()
-    
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -74,55 +74,73 @@ class ExpandedViewController: UIViewController {
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
         
-        //get primary weather
-        openWeatherService.get5DayForcast((self.currentWeatherConditions?.cityName)!, state:(self.currentWeatherConditions?.stateAbbreiviation)!) { (result, success) in
-            if success {
-                
-                //print(result!)
-                
-                let day1Forecast = result![1] as DailyForecast
-                let day2Forecast = result![2] as DailyForecast
-                let day3Forecast = result![3] as DailyForecast
-                let day4Forecast = result![4] as DailyForecast
-                let day5Forecast = result![5] as DailyForecast
-                
-                // Update the UI
-                self.day1Label.text = day1Forecast.day
-                self.day2Label.text = day2Forecast.day
-                self.day3Label.text = day3Forecast.day
-                self.day4Label.text = day4Forecast.day
-                self.day5Label.text = day5Forecast.day
-                
-                self.day1Icon.image = UIImage(named:"\(day1Forecast.mainIcon).png")
-                self.day2Icon.image = UIImage(named:"\(day2Forecast.mainIcon).png")
-                self.day3Icon.image = UIImage(named:"\(day3Forecast.mainIcon).png")
-                self.day4Icon.image = UIImage(named:"\(day4Forecast.mainIcon).png")
-                self.day5Icon.image = UIImage(named:"\(day5Forecast.mainIcon).png")
-                
-                self.day1Temp.text = "\(day1Forecast.temperatureMax_fahrenheit)°F/\(day1Forecast.temperatureMin_fahrenheit)°F"
-                self.day2Temp.text = "\(day2Forecast.temperatureMax_fahrenheit)°F/\(day2Forecast.temperatureMin_fahrenheit)°F"
-                self.day3Temp.text = "\(day3Forecast.temperatureMax_fahrenheit)°F/\(day3Forecast.temperatureMin_fahrenheit)°F"
-                self.day4Temp.text = "\(day4Forecast.temperatureMax_fahrenheit)°F/\(day4Forecast.temperatureMin_fahrenheit)°F"
-                self.day5Temp.text = "\(day5Forecast.temperatureMax_fahrenheit)°F/\(day5Forecast.temperatureMin_fahrenheit)°F"
+        if GlobalConstants.hasConnectivity() {
+            
+            //get primary weather
+            openWeatherService.get5DayForcast((self.currentWeatherConditions?.cityName)!, state:(self.currentWeatherConditions?.stateAbbreiviation)!) { (result, success) in
+                if success {
+                    
+                    //print(result!)
+                    
+                    let day1Forecast = result![1] as DailyForecast
+                    let day2Forecast = result![2] as DailyForecast
+                    let day3Forecast = result![3] as DailyForecast
+                    let day4Forecast = result![4] as DailyForecast
+                    let day5Forecast = result![5] as DailyForecast
+                    
+                    // Update the UI
+                    self.day1Label.text = day1Forecast.day
+                    self.day2Label.text = day2Forecast.day
+                    self.day3Label.text = day3Forecast.day
+                    self.day4Label.text = day4Forecast.day
+                    self.day5Label.text = day5Forecast.day
+                    
+                    self.day1Icon.image = UIImage(named:"\(day1Forecast.mainIcon).png")
+                    self.day2Icon.image = UIImage(named:"\(day2Forecast.mainIcon).png")
+                    self.day3Icon.image = UIImage(named:"\(day3Forecast.mainIcon).png")
+                    self.day4Icon.image = UIImage(named:"\(day4Forecast.mainIcon).png")
+                    self.day5Icon.image = UIImage(named:"\(day5Forecast.mainIcon).png")
+                    
+                    self.day1Temp.text = "\(day1Forecast.temperatureMax_fahrenheit)°F/\(day1Forecast.temperatureMin_fahrenheit)°F"
+                    self.day2Temp.text = "\(day2Forecast.temperatureMax_fahrenheit)°F/\(day2Forecast.temperatureMin_fahrenheit)°F"
+                    self.day3Temp.text = "\(day3Forecast.temperatureMax_fahrenheit)°F/\(day3Forecast.temperatureMin_fahrenheit)°F"
+                    self.day4Temp.text = "\(day4Forecast.temperatureMax_fahrenheit)°F/\(day4Forecast.temperatureMin_fahrenheit)°F"
+                    self.day5Temp.text = "\(day5Forecast.temperatureMax_fahrenheit)°F/\(day5Forecast.temperatureMin_fahrenheit)°F"
+                    
+                }
+                else {
+                    //There was an error getting primary location weather conditions
+                }
                 
             }
-            else {
-                //There was an error getting primary location weather conditions
+        }
+        else {
+            
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
             }
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+            
             
         }
         
     }
-
-
+    
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

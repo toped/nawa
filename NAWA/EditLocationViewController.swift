@@ -138,8 +138,9 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
         
-        
-        //get primary weather
+        if GlobalConstants.hasConnectivity() {
+
+        //get weather
         openWeatherService.getCurrentWeather(self.cityTextField.text!, state:self.stateTextField.text!) { (result, success) in
             if success {
                 
@@ -151,6 +152,22 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
             else {
                 //There was an error getting primary location weather conditions
             }
+            
+        }
+        }
+        else {
+            
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
+            }
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+            
             
         }
         
@@ -230,6 +247,8 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         
         let stateInfo = StateDataFecher.init()
         
+        if GlobalConstants.hasConnectivity() {
+    
         stateInfo.getCitiesForState(state, completion: { (result, success) in
             
             if success {
@@ -242,6 +261,22 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
             }
             
         })
+        }
+        else {
+            
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
+            }
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+            
+            
+        }
         
         
     }

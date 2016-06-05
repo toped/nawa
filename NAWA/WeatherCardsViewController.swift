@@ -23,14 +23,14 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
     var editingPrimary = false
     var editingSecondary = false
     var editingTertiary = false
-
+    
     @IBOutlet weak var weatherCardsTable: UITableView!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         self.getWeather(self)
-    
+        
     }
     
     override func viewDidLoad() {
@@ -64,9 +64,9 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
                                                 action: #selector(self.refreshWeather))
         
         let currentLocationBtn = UIBarButtonItem(image: UIImage(named: "current-location-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
-                                                style: UIBarButtonItemStyle.Plain,
-                                                target: self,
-                                                action: #selector(self.getWeatherAtLocation))
+                                                 style: UIBarButtonItemStyle.Plain,
+                                                 target: self,
+                                                 action: #selector(self.getWeatherAtLocation))
         
         navigationItem.rightBarButtonItems = [changeLocationBtn, currentLocationBtn]
         
@@ -101,35 +101,55 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
                     //self.currentLat = "\(self.locationManager.location?.coordinate.latitude)"
                     //self.currentLon = "\(self.locationManager.location?.coordinate.longitude)"
                     
-                    let geocoder = CLGeocoder()
-                    geocoder.reverseGeocodeLocation(self.locationManager.location!, completionHandler: { (placemarks, e) -> Void in
-                        if e != nil {
-                            print("Error:  \(e!.localizedDescription)")
-                        } else {
-                            let placemark = placemarks!.last! as CLPlacemark
-                            
-                            let userDefaults = NSUserDefaults.standardUserDefaults()
-                            userDefaults.setObject(placemark.locality, forKey:GlobalConstants.PRIMARY_CITY_KEY)
-                            userDefaults.setObject(placemark.administrativeArea, forKey:GlobalConstants.PRIMARY_STATE_KEY)
-                            
-                            userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
-                            userDefaults.synchronize()
-                            
-                            self.weatherLocations[0] = "\(placemark.locality!), \(placemark.administrativeArea!)"
-                            
-                            self.getWeather(self)
-                            
+                    if GlobalConstants.hasConnectivity() {
+                        
+                        let geocoder = CLGeocoder()
+                        geocoder.reverseGeocodeLocation(self.locationManager.location!, completionHandler: { (placemarks, e) -> Void in
+                            if e != nil {
+                                print("Error:  \(e!.localizedDescription)")
+                            } else {
+                                let placemark = placemarks!.last! as CLPlacemark
+                                
+                                let userDefaults = NSUserDefaults.standardUserDefaults()
+                                userDefaults.setObject(placemark.locality, forKey:GlobalConstants.PRIMARY_CITY_KEY)
+                                userDefaults.setObject(placemark.administrativeArea, forKey:GlobalConstants.PRIMARY_STATE_KEY)
+                                
+                                userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
+                                userDefaults.synchronize()
+                                
+                                self.weatherLocations[0] = "\(placemark.locality!), \(placemark.administrativeArea!)"
+                                
+                                self.getWeather(self)
+                                
+                            }
+                        })
+                    }
+                    else {
+                        
+                        let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+                        
+                        let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                            // ...
                         }
-                    })
+                        alertController.addAction(cancelAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
+                        
+                        
+                    }
                     
-                    
-                    //self.getWeather("locationManager")
                 }
             }
         }
     }
     
     func refreshWeather() {
+        
+        if (self.expander != nil) {
+            self.expandedCellWillCollapse()
+        }
         
         self.getWeather(self)
         
@@ -145,11 +165,11 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         alertController.addAction(cancelAction)
         
         let OKAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
-
+            
             if (self.expander != nil) {
                 self.expandedCellWillCollapse()
             }
-
+            
             self.configureLocationServices()
             return
         }
@@ -162,12 +182,12 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
     }
     
     func configureUI() {
-                
+        
         //View controller-based status bar appearance added to Info.plist
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
         
         
-
+        
     }
     
     func getWeather(sender: AnyObject) {
@@ -176,48 +196,66 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         
         let userDefaults = NSUserDefaults.standardUserDefaults()
         
-        //get primary weather
-        openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.PRIMARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.PRIMARY_STATE_KEY)!) { (result, success) in
-            if success {
-                
-                self.currentPrimaryConditions = result!
-                
-                //get secondary weather
-                openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.SECONDARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.SECONDARY_STATE_KEY)!) { (result, success) in
-                    if success {
-                        
-                        self.currentSecondaryConditions = result!
-                        
-                        
-                        //get tertiary weather conditions
-                        openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.TERTIARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.TERTIARY_STATE_KEY)!) { (result, success) in
-                            if success {
+        if GlobalConstants.hasConnectivity() {
+            
+            //get primary weather
+            openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.PRIMARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.PRIMARY_STATE_KEY)!) { (result, success) in
+                if success {
+                    
+                    self.currentPrimaryConditions = result!
+                    
+                    //get secondary weather
+                    openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.SECONDARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.SECONDARY_STATE_KEY)!) { (result, success) in
+                        if success {
+                            
+                            self.currentSecondaryConditions = result!
+                            
+                            
+                            //get tertiary weather conditions
+                            openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.TERTIARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.TERTIARY_STATE_KEY)!) { (result, success) in
+                                if success {
+                                    
+                                    self.currentTertiaryConditions = result!
+                                    
+                                    self.weatherCardsTable.reloadData()
+                                    
+                                }
+                                else {
+                                    //There was an error getting tertiary location weather conditions
+                                }
                                 
-                                self.currentTertiaryConditions = result!
-                                
-                                self.weatherCardsTable.reloadData()
-                                
-                            }
-                            else {
-                                //There was an error getting tertiary location weather conditions
                             }
                             
                         }
+                        else {
+                            //There was an error getting secondary location weather conditions
+                        }
                         
-                    }
-                    else {
-                        //There was an error getting secondary location weather conditions
                     }
                     
                 }
+                else {
+                    //There was an error getting primary location weather conditions
+                }
                 
-            }
-            else {
-                //There was an error getting primary location weather conditions
             }
             
         }
-        
+        else {
+            
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            
+            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                // ...
+            }
+            alertController.addAction(cancelAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+            
+            
+        }
     }
     
     
@@ -239,7 +277,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         let navBarRect = self.navigationController?.navigationBar.bounds
         let navBarHeight = navBarRect?.size.height
         let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
-
+        
         
         return (screenHeight - navBarHeight! - statusBarHeight) / CGFloat(weatherLocations.count);
     }
@@ -266,7 +304,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             else {
                 cell.currentLocationLabel.text = ""
             }
-
+            
         }
         else if indexPath.row == 1 {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
@@ -276,7 +314,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             cell.weatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions!.mainIcon).png")
             
             cell.currentLocationLabel.text = ""
-
+            
         }
         else {
             cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
@@ -284,13 +322,13 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             
             cell.currentTemperature.text = "\(self.currentTertiaryConditions!.temperature_fahrenheit)°F"
             cell.weatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions!.mainIcon).png")
-
+            
             cell.currentLocationLabel.text = ""
-
+            
         }
         
         cell.cellBackground.clipsToBounds = true;
-
+        
         return cell
     }
     
@@ -318,7 +356,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         if indexPath.row == 0 {
             self.expander!.currentWeatherConditions = currentPrimaryConditions
             self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
-             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
+            self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
         }
         else if indexPath.row == 1 {
             self.expander!.currentWeatherConditions = currentSecondaryConditions
@@ -364,7 +402,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]?  {
         // 1
         let editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Edit" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
-
+            
             let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EditLocation") as? EditLocationViewController
             vc?.delegate = self
             
@@ -380,7 +418,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             
             let vc_nav = UINavigationController(rootViewController: vc!)
             self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
-        
+            
         })
         
         
@@ -392,7 +430,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         expander!.willMoveToParentViewController(nil)
         self.expander!.currentTemperatureLabel.text = ""
         self.expander!.locationLabel.text = ""
-
+        
         //animate the view
         UIView.animateWithDuration(0.55, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
             
@@ -400,7 +438,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             self.expander!.locationBackgroundImage.alpha = 0
             self.expander!.view.alpha = 0
             self.expander!.view.backgroundColor = UIColor.init(colorLiteralRed: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-
+            
             
             }, completion: { (finished: Bool) -> Void in
                 
@@ -424,12 +462,12 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.PRIMARY_STATE_KEY)
             userDefaults.setBool(false, forKey:GlobalConstants.USING_CURRENT_LOCATION)
             userDefaults.synchronize()
-
+            
         }
         else if self.editingSecondary {
             
             self.editingSecondary = false
-
+            
             self.currentSecondaryConditions = data
             self.weatherLocations[1] = "\(data.cityName), \(data.stateAbbreiviation)"
             
@@ -437,12 +475,12 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             userDefaults.setObject(data.cityName, forKey:GlobalConstants.SECONDARY_CITY_KEY)
             userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.SECONDARY_STATE_KEY)
             userDefaults.synchronize()
-
+            
         }
         else {
             
             self.editingTertiary = false
-
+            
             self.currentTertiaryConditions = data
             self.weatherLocations[2] = "\(data.cityName), \(data.stateAbbreiviation)"
             
