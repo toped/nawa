@@ -19,6 +19,13 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
 
     @IBOutlet weak var weatherCardsTable: UITableView!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.getWeather(self)
+    
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,12 +51,17 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         navigationItem.leftBarButtonItem = backButton
         
         //set right bar button
-        let changeLocationBtn = UIBarButtonItem(image: UIImage(named: "new-location-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
+        let changeLocationBtn = UIBarButtonItem(image: UIImage(named: "settings-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
                                                 style: UIBarButtonItemStyle.Plain,
                                                 target: self,
                                                 action: #selector(self.changeLocation))
         
-        navigationItem.rightBarButtonItems = [changeLocationBtn]
+        let currentLocationBtn = UIBarButtonItem(image: UIImage(named: "current-location-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
+                                                style: UIBarButtonItemStyle.Plain,
+                                                target: self,
+                                                action: #selector(self.getWeatherAtLocation))
+        
+        navigationItem.rightBarButtonItems = [changeLocationBtn, currentLocationBtn]
         
         
     }
@@ -59,12 +71,85 @@ class WeatherCardsViewController: UIViewController, ExpandedCellDelegate {
         
     }
     
+    func getWeatherAtLocation() {
+        
+        let alertController = UIAlertController(title: "Change Primary Location", message: "Would you like to update primary weather using your current location?", preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            // ...
+        }
+        alertController.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
+            // ...
+        }
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
+        }
+        
+    }
+    
     func configureUI() {
                 
         //View controller-based status bar appearance added to Info.plist
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
+        
+        
 
     }
+    
+    func getWeather(sender: AnyObject) {
+        
+        let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        //get primary weather
+        openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.PRIMARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.PRIMARY_STATE_KEY)!) { (result, success) in
+            if success {
+                
+                self.currentPrimaryConditions = result!
+                
+                //get secondary weather
+                openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.SECONDARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.SECONDARY_STATE_KEY)!) { (result, success) in
+                    if success {
+                        
+                        self.currentSecondaryConditions = result!
+                        
+                        
+                        //get tertiary weather conditions
+                        openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.TERTIARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.TERTIARY_STATE_KEY)!) { (result, success) in
+                            if success {
+                                
+                                self.currentTertiaryConditions = result!
+                                
+                                self.weatherCardsTable.reloadData()
+                                
+                            }
+                            else {
+                                //There was an error getting tertiary location weather conditions
+                            }
+                            
+                        }
+                        
+                    }
+                    else {
+                        //There was an error getting secondary location weather conditions
+                    }
+                    
+                }
+                
+            }
+            else {
+                //There was an error getting primary location weather conditions
+            }
+            
+        }
+        
+    }
+    
     
     // MARK: - Table view data source
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

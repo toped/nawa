@@ -8,8 +8,12 @@
 
 import UIKit
 import Alamofire
+import CoreLocation
 
-class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionDelegate, CitySelectionDelegate {
+
+class HomeViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, StateSelectionDelegate, CitySelectionDelegate {
+    
+    var locationManager:CLLocationManager!
 
     @IBOutlet weak var locationInputView: UIView!
     @IBOutlet weak var cityTextField: UITextField!
@@ -28,6 +32,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
     var primaryWeatherConditions = WeatherCondition?()
     var secondaryWeatherConditions = WeatherCondition?()
     var tertiaryWeatherConditions = WeatherCondition?()
+    
+    var currentLat: String?
+    var currentLon: String?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -49,8 +56,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
         
         self.secondaryCity = "Cupertino"
         self.secondaryState = "CA"
-        self.tertiaryCity = "Mountain View"
-        self.tertiaryState = "CA"
+        self.tertiaryCity = "Seattle"
+        self.tertiaryState = "WA"
         
         //check if primary city has been set
         let userDefaults = NSUserDefaults.standardUserDefaults()
@@ -63,12 +70,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
             self.tertiaryCity = userDefaults.stringForKey(GlobalConstants.TERTIARY_CITY_KEY)
             self.tertiaryState = userDefaults.stringForKey(GlobalConstants.TERTIARY_STATE_KEY)
             self.view.alpha = 0
-            self.getWeather("not self")
+            self.getWeather("viewDidLoad")
             
         }
 
         configureTapGestures()
         configureUI()
+
         //Populate the cities array
         self.populateStates()
     }
@@ -90,6 +98,48 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
         getWeatherButton.clipsToBounds = true
         
     }
+    
+    func configureLocationServices() {
+        
+        //Set up the location services
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.distanceFilter = 10; // 10m
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+        
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == .AuthorizedWhenInUse {
+            if CLLocationManager.isMonitoringAvailableForClass(CLBeaconRegion.self) {
+                if CLLocationManager.isRangingAvailable() {
+                    //self.currentLat = "\(self.locationManager.location?.coordinate.latitude)"
+                    //self.currentLon = "\(self.locationManager.location?.coordinate.longitude)"
+ 
+                    let geocoder = CLGeocoder()
+                    geocoder.reverseGeocodeLocation(self.locationManager.location!, completionHandler: { (placemarks, e) -> Void in
+                        if e != nil {
+                            print("Error:  \(e!.localizedDescription)")
+                        } else {
+                            let placemark = placemarks!.last! as CLPlacemark
+                            
+                            self.cityTextField.text = placemark.locality
+                            self.stateTextField.text = placemark.administrativeArea
+                            
+                            self.getWeather(self)
+                            
+                        }
+                    })
+                    
+                    
+                    //self.getWeather("locationManager")
+                }
+            }
+        }
+    }
+
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         if textField == self.stateTextField {
@@ -204,15 +254,24 @@ class HomeViewController: UIViewController, UITextFieldDelegate, StateSelectionD
         }
     }
     
-    func getWeather(sender: AnyObject) {
+
+    @IBAction func getWeather(sender: AnyObject) {
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
         
         var shouldAnimate = false
+        
         if sender as! NSObject == self {
             self.primaryCity = cityTextField.text!
             self.primaryState = stateTextField.text!
             shouldAnimate = true
+        }
+        else if sender as! NSObject == self.getWeatherButton {
+            configureLocationServices()
+            return
+        }
+        else if sender as! String == "locationManager" {
+            
         }
         
         //get primary weather
