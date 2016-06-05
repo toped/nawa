@@ -10,16 +10,19 @@ import UIKit
 import CoreLocation
 
 
-class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, ExpandedCellDelegate {
+class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, ExpandedCellDelegate, EditLocationDelegate {
     
     var locationManager:CLLocationManager!
-
+    
     var weatherLocations = [String]()
     var chosenCellFrame = CGRect()
     var expander = ExpandedViewController?()
     var currentPrimaryConditions = WeatherCondition?()
     var currentSecondaryConditions = WeatherCondition?()
     var currentTertiaryConditions = WeatherCondition?()
+    var editingPrimary = false
+    var editingSecondary = false
+    var editingTertiary = false
 
     @IBOutlet weak var weatherCardsTable: UITableView!
     
@@ -131,6 +134,11 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         alertController.addAction(cancelAction)
         
         let OKAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
+
+            if (self.expander != nil) {
+                self.expandedCellWillCollapse()
+            }
+
             self.configureLocationServices()
             return
         }
@@ -270,6 +278,8 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
 
         }
         
+        cell.cellBackground.clipsToBounds = true;
+
         return cell
     }
     
@@ -337,6 +347,35 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         
     }
     
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]?  {
+        // 1
+        let editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Edit" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+
+            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EditLocation") as? EditLocationViewController
+            vc?.delegate = self
+            
+            if indexPath.row == 0 {
+                self.editingPrimary = true
+            }
+            else if indexPath.row == 1 {
+                self.editingSecondary = true
+            }
+            else {
+                self.editingTertiary = true
+            }
+            
+            let vc_nav = UINavigationController(rootViewController: vc!)
+            self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+        
+        })
+        
+        
+        return [editAction]
+    }
+    
     func expandedCellWillCollapse() {
         
         expander!.willMoveToParentViewController(nil)
@@ -351,7 +390,6 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             self.expander!.view.alpha = 0
             self.expander!.view.backgroundColor = UIColor.init(colorLiteralRed: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
 
-
             
             }, completion: { (finished: Bool) -> Void in
                 
@@ -359,6 +397,52 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
                 self.expander!.removeFromParentViewController()
         })
         
+    }
+    
+    func updateViewWithNewWeatherData(data:WeatherCondition) {
+        
+        if self.editingPrimary {
+            
+            self.editingPrimary = false
+            
+            self.currentPrimaryConditions = data
+            self.weatherLocations[0] = "\(data.cityName), \(data.stateAbbreiviation)"
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            userDefaults.setObject(data.cityName, forKey:GlobalConstants.PRIMARY_CITY_KEY)
+            userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.PRIMARY_STATE_KEY)
+            userDefaults.setBool(false, forKey:GlobalConstants.USING_CURRENT_LOCATION)
+            userDefaults.synchronize()
+
+        }
+        else if self.editingSecondary {
+            
+            self.editingSecondary = false
+
+            self.currentSecondaryConditions = data
+            self.weatherLocations[1] = "\(data.cityName), \(data.stateAbbreiviation)"
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            userDefaults.setObject(data.cityName, forKey:GlobalConstants.SECONDARY_CITY_KEY)
+            userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.SECONDARY_STATE_KEY)
+            userDefaults.synchronize()
+
+        }
+        else {
+            
+            self.editingTertiary = false
+
+            self.currentTertiaryConditions = data
+            self.weatherLocations[2] = "\(data.cityName), \(data.stateAbbreiviation)"
+            
+            let userDefaults = NSUserDefaults.standardUserDefaults()
+            userDefaults.setObject(data.cityName, forKey:GlobalConstants.TERTIARY_CITY_KEY)
+            userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.TERTIARY_STATE_KEY)
+            userDefaults.synchronize()
+            
+        }
+        
+        self.weatherCardsTable.reloadData()
     }
     
     override func didReceiveMemoryWarning() {

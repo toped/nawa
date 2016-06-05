@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		941E21F31D03DBE0004EA177 /* EditLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941E21F21D03DBE0004EA177 /* EditLocationViewController.swift */; };
 		942299D31CF15650004DA301 /* StatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942299D21CF15650004DA301 /* StatesViewController.swift */; };
 		9436C75C1CFD485D0038BCD1 /* states.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9436C75B1CFD485D0038BCD1 /* states.plist */; };
 		945CDD621CF14E2D0031CA9C /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945CDD611CF14E2D0031CA9C /* State.swift */; };
@@ -122,6 +123,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		941E21F21D03DBE0004EA177 /* EditLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditLocationViewController.swift; sourceTree = "<group>"; };
 		942299D21CF15650004DA301 /* StatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatesViewController.swift; sourceTree = "<group>"; };
 		9436C75B1CFD485D0038BCD1 /* states.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = states.plist; sourceTree = "<group>"; };
 		945CDD611CF14E2D0031CA9C /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = State.swift; path = Classes/State.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				945F5F651CF5E3AD00A7FEE5 /* CitiesViewController.swift */,
 				94FFB8801CF0E682009F12DD /* WeatherCardsViewController.swift */,
 				94FFB8841CF0EEBE009F12DD /* ExpandedViewController.swift */,
+				941E21F21D03DBE0004EA177 /* EditLocationViewController.swift */,
 				94FFB8701CF0CA3C009F12DD /* Main.storyboard */,
 				94FFB8731CF0CA3C009F12DD /* Assets.xcassets */,
 				94FFB8751CF0CA3C009F12DD /* LaunchScreen.storyboard */,
@@ -447,6 +450,7 @@
 				94FFB8FE1CF135B3009F12DD /* Response.swift in Sources */,
 				94FFB8FF1CF135B3009F12DD /* ResponseSerialization.swift in Sources */,
 				94FFB9051CF135B3009F12DD /* Validation.swift in Sources */,
+				941E21F31D03DBE0004EA177 /* EditLocationViewController.swift in Sources */,
 				94FFB8F91CF135B3009F12DD /* MultipartFormData.swift in Sources */,
 				94FFB88B1CF10295009F12DD /* WeatherCardTableViewCell.swift in Sources */,
 				945F5F661CF5E3AD00A7FEE5 /* CitiesViewController.swift in Sources */,
