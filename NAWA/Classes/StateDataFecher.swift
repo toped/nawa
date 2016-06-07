@@ -18,8 +18,8 @@ class StateDataFecher: NSObject {
     
     func getCitiesForState(state: String, completion: (result: [City]?, success: Bool) -> Void) {
         
-        let URL = NSURL(string: "http://topedaramola.com/apis/worlds/apiv1/state/index?method=getCitiesForState&state_abbr=" + state)!
-        //print("got back: \(URL)")
+        let URL = NSURL(string: "http://topedaramola.com/apis/worlds/apiv1/state/?method=getCitiesForState&state_abbr=" + state)!
+        print("got back: \(URL)")
         let URLRequest = NSMutableURLRequest(URL: URL)
         URLRequest.cachePolicy = .ReloadIgnoringCacheData
         
