@@ -26,32 +26,25 @@ class OpenWeather: NSObject {
     }
     
     
-    func getCurrentWeather(city: String, state: String, completion: (result: WeatherCondition?, success: Bool) -> Void) {
+    func getCurrentWeather(city: String, state: String, latitude: String, longitude: String, completion: @escaping (_ result: WeatherCondition?, _ success: Bool) -> Void) {
         
-        let url : String = "http://api.openweathermap.org/data/2.5/weather?q=\(city), \(state)&appid=\(self.apiKey)"
-        let urlStr : String = url.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!
-        //let searchURL : NSURL = NSURL(string: urlStr as String)!
+        let URL = "http://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(self.apiKey)"
+        let URLstr = URL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 
-        let searchURL : NSURL = NSURL(string: urlStr)!
-        
-        //print("got back: \(searchURL)")
-        
-        let URLRequest = NSMutableURLRequest(URL: searchURL)
-        URLRequest.cachePolicy = .ReloadIgnoringCacheData
-        
-        Alamofire.request(URLRequest).responseJSON { response in
+        print(URLstr)
+        Alamofire.request(URLstr, method: HTTPMethod.get, encoding: JSONEncoding.default).responseJSON { response in
             //print(response.request)  // original URL request
             //print(response.response) // URL response
             //print(response.data)     // server data
             //print(response.result)   // result of response serialization
             
             switch response.result {
-            case .Success(let JSON):
+            case .success(let JSON):
                 //print("Success with JSON: \(JSON)")
                 
                 let response = JSON as! [String: AnyObject]
                 
-                guard let currentWeather = response["main"] as? [String: AnyObject],
+                guard let currentWeather = response["main"],
                     let currentTemp = currentWeather["temp"],
                     let currentTempMin = currentWeather["temp_min"],
                     let currentTempMax = currentWeather["temp_max"] else {
@@ -59,24 +52,24 @@ class OpenWeather: NSObject {
                         return;
                 }
                 
-                guard let weather = response["weather"]?.objectAtIndex(0) as? [String: AnyObject],
-                    let icon = weather["icon"] else {
+                
+                guard let weather = response["weather"] as? [AnyObject],
+                    let icon = weather[0]["icon"] else {
                         print("Request parse failed with gaurd error")
                         return;
                 }
                 
                 //print(currentTemp)
+                let weatherConditions = WeatherCondition.init(city: city, state: state, latitude: latitude, longitude: longitude, description: "", mainIcon: icon as! String, temperature: "\(currentTemp!)", temperatureMin: "\(currentTempMin!)", temperatureMax: "\(currentTempMax!)")
                 
-                let weatherConditions = WeatherCondition.init(city: city, state: state, description:"", mainIcon:icon as! String, temperature:"\(currentTemp)", temperatureMin:"\(currentTempMin)", temperatureMax:"\(currentTempMax)")
-                
-                completion(result:weatherConditions, success:true)
-                
+                completion(weatherConditions, true)
                 
                 
-            case .Failure(let error):
+                
+            case .failure(let error):
                 print("Request failed with error: \(error)")
                 
-                completion(result:nil, success:false)
+                completion(nil, false)
                 
             }
 
@@ -84,27 +77,20 @@ class OpenWeather: NSObject {
         }
     }
     
-    func get5DayForcast(city: String, state: String, completion: (result: [DailyForecast]?, success: Bool) -> Void) {
+    
+    func get5DayForcast(city: String, state: String, latitude: String, longitude: String, completion: @escaping (_ result: [DailyForecast]?, _ success: Bool) -> Void) {
         
-        let url : String = "http://api.openweathermap.org/data/2.5/forecast/daily?q=\(city), \(state)&appid=\(self.apiKey)"
-        let urlStr : String = url.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!
-        //let searchURL : NSURL = NSURL(string: urlStr as String)!
+        let url : String = "http://api.openweathermap.org/data/2.5/forecast/daily?lat=\(latitude)&lon=\(longitude)&appid=\(self.apiKey)"
+        let urlStr : String = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
-        let searchURL : NSURL = NSURL(string: urlStr)!
-        
-        //print("got back forecast: \(searchURL)")
-        
-        let URLRequest = NSMutableURLRequest(URL: searchURL)
-        URLRequest.cachePolicy = .ReloadIgnoringCacheData
-        
-        Alamofire.request(URLRequest).responseJSON { response in
+        Alamofire.request(urlStr, method: HTTPMethod.get, encoding: JSONEncoding.default).responseJSON { response in
             //print(response.request)  // original URL request
             //print(response.response) // URL response
             //print(response.data)     // server data
             //print(response.result)   // result of response serialization
             
             switch response.result {
-            case .Success(let JSON):
+            case .success(let JSON):
                 //print("Success with JSON: \(JSON)")
                 
                 let response = JSON as! [String: AnyObject]
@@ -113,15 +99,16 @@ class OpenWeather: NSObject {
                 var dailyForecasts = [DailyForecast]()
                 
                 for item in forecasts {
-                    
+                    let item = item as! [String : Any]
+
                     let currentDay = item["dt"] as! Double
                     let date = NSDate(timeIntervalSince1970: currentDay)
 
-                    let usDateFormat = NSDateFormatter.dateFormatFromTemplate("EEEE", options: 0, locale: NSLocale(localeIdentifier: "en-US"))
+                    let usDateFormat = DateFormatter.dateFormat(fromTemplate: "EEEE", options: 0, locale: NSLocale(localeIdentifier: "en-US") as Locale)
                     
-                    let formatter = NSDateFormatter()
+                    let formatter = DateFormatter()
                     formatter.dateFormat = usDateFormat
-                    let usSwiftDayString = formatter.stringFromDate(date)
+                    let usSwiftDayString = formatter.string(from: date as Date)
                     
                     
                     guard let currentTemp = item["temp"] as? [String: AnyObject],
@@ -134,7 +121,7 @@ class OpenWeather: NSObject {
                     
                     let weather = item["weather"] as! NSArray
 
-                    guard let weatherList = weather.objectAtIndex(0) as? [String: AnyObject],
+                    guard let weatherList = weather.object(at: 0) as? [String: AnyObject],
                         let icon = weatherList["icon"] else {
                             print("Request parse failed with gaurd error")
                             return;
@@ -147,13 +134,13 @@ class OpenWeather: NSObject {
 
                 }
             
-                completion(result:dailyForecasts, success:true)
+                completion(dailyForecasts, true)
 
                 
-            case .Failure(let error):
+            case .failure(let error):
                 print("Request failed with error: \(error)")
                 
-                completion(result:nil, success:false)
+                completion(nil, false)
                 
             }
             

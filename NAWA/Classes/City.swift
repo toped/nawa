@@ -10,6 +10,7 @@ import Foundation
 
 class City: NSObject, NSCoding {
     
+    
     var name:String = "N/A"
     var stateAbbriviation:String = "N/A"
     var latitude:String = "N/A"
@@ -30,10 +31,10 @@ class City: NSObject, NSCoding {
     
     required convenience init(coder aDecoder: NSCoder) {
         
-        let name = aDecoder.decodeObjectForKey("name") as! String
-        let stateAbbriviation = aDecoder.decodeObjectForKey("stateAbbriviation") as! String
-        let latitude = aDecoder.decodeObjectForKey("latitude") as! String
-        let longitude = aDecoder.decodeObjectForKey("longitude") as! String
+        let name = aDecoder.decodeObject(forKey:"name") as! String
+        let stateAbbriviation = aDecoder.decodeObject(forKey:"stateAbbriviation") as! String
+        let latitude = aDecoder.decodeObject(forKey:"latitude") as! String
+        let longitude = aDecoder.decodeObject(forKey:"longitude") as! String
         
         self.init(
             name:name,
@@ -43,11 +44,11 @@ class City: NSObject, NSCoding {
         )
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(stateAbbriviation, forKey: "stateAbbriviation")
-        aCoder.encodeObject(latitude, forKey: "latitude")
-        aCoder.encodeObject(longitude, forKey: "longitude")
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey:"name")
+        aCoder.encode(stateAbbriviation, forKey: "stateAbbriviation")
+        aCoder.encode(latitude, forKey: "latitude")
+        aCoder.encode(longitude, forKey: "longitude")
         
     }
     

@@ -15,10 +15,19 @@ struct GlobalConstants {
     static let STATES_KEY               = "STATES_KEY"
     static let PRIMARY_CITY_KEY         = "PRIMARY_CITY_KEY"
     static let PRIMARY_STATE_KEY        = "PRIMARY_STATE_KEY"
+    static let PRIMARY_LAT_KEY          = "PRIMARY_LAT_KEY"
+    static let PRIMARY_LON_KEY          = "PRIMARY_LON_KEY"
+    
     static let SECONDARY_CITY_KEY       = "SECONDARY_CITY_KEY"
     static let SECONDARY_STATE_KEY      = "SECONDARY_STATE_KEY"
+    static let SECONDARY_LAT_KEY        = "SECONDARY_LAT_KEY"
+    static let SECONDARY_LON_KEY        = "SECONDARY_LON_KEY"
+    
     static let TERTIARY_CITY_KEY        = "TERTIARY_CITY_KEY"
     static let TERTIARY_STATE_KEY       = "TERTIARY_STATE_KEY"
+    static let TERTIARY_LAT_KEY         = "TERTIARY_LAT_KEY"
+    static let TERTIARY_LON_KEY         = "TERTIARY_LON_KEY"
+    
     static let USING_CURRENT_LOCATION   = "USING_CURRENT_LOCATION"
 
     //TableViewCell Identifiers
@@ -40,7 +49,7 @@ struct GlobalConstants {
     }
     
     static func hasConnectivity() -> Bool {
-        let reachability: Reachability = Reachability.reachabilityForInternetConnection()
+        let reachability: Reachability = Reachability.forInternetConnection()
         let networkStatus: Int = reachability.currentReachabilityStatus().rawValue
         return networkStatus != 0
     }

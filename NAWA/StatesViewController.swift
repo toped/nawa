@@ -22,15 +22,15 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var shouldShowSearchResults = false
     @IBOutlet weak var statesTableView: UITableView!
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.edgesForExtendedLayout = UIRectEdge.None
+        self.edgesForExtendedLayout = []
         //Hide the navigation bar
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
@@ -43,13 +43,13 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         //set right bar button
         let dismissBtn = UIBarButtonItem(title:"Cancel",
-                                                style: UIBarButtonItemStyle.Plain,
+                                                style: UIBarButtonItemStyle.plain,
                                                 target: self,
                                                 action: #selector(self.dismissView))
         
         navigationItem.rightBarButtonItems = [dismissBtn]
         
-        dismissBtn.tintColor = UIColor.lightGrayColor()
+        dismissBtn.tintColor = UIColor.lightGray
 
     }
     
@@ -61,22 +61,22 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     // needed a second dismiss function to avoid error: (-[UIBarButtonItem copyWithZone:]: unrecognized selector sent to instance)
-    func dismissView() {
+    @objc func dismissView() {
         
         // Clear the Search bar text
-        self.searchController.active = false;
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.searchController.isActive = false;
+        self.navigationController?.dismiss(animated: true, completion: nil)
         
     }
     
     func dismissViewWith(state: String?) {
         
         // Clear the Search bar text
-        self.searchController.active = false;
-        self.navigationController?.dismissViewControllerAnimated(true, completion: {
+        self.searchController.isActive = false;
+        self.navigationController?.dismiss(animated: true, completion: {
         
             if state != nil {
-                self.delegate?.updateViewWithState(state!)
+                self.delegate?.updateViewWithState(state: state!)
             }
             
         })
@@ -86,7 +86,7 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func configureUI() {
         
         //View controller-based status bar appearance added to Info.plist
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
         
     }
     
@@ -94,7 +94,7 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if shouldShowSearchResults {
             return filteredStates.count
@@ -105,8 +105,8 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GlobalConstants.STATE_CELL_IDENTIFIER, forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: GlobalConstants.STATE_CELL_IDENTIFIER, for: indexPath)
         
         // Configure the cell...
         if shouldShowSearchResults {
@@ -120,10 +120,10 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView.cellForRowAtIndexPath(indexPath)?.textLabel?.text == "" {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if tableView.cellForRow(at: indexPath as IndexPath)?.textLabel?.text == "" {
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             return
         }
         
@@ -136,11 +136,11 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             selectedState = states[indexPath.row]
         }
         
-        self.dismissViewWith(selectedState.stateAbbriviation)
+        self.dismissViewWith(state: selectedState.stateAbbriviation)
 
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.dismissKeyboard()
     }
 
@@ -155,7 +155,7 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.placeholder = "Search states..."
         searchController.searchBar.delegate = self
         searchController.searchBar.sizeToFit()
-        self.edgesForExtendedLayout = UIRectEdge.None
+        self.edgesForExtendedLayout = []
         
         // Place the search bar view to the tableview headerview.
         view.addSubview(searchController.searchBar)
@@ -163,18 +163,18 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //countyOfficeTable.tableHeaderView = searchController.searchBar
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         shouldShowSearchResults = true
         statesTableView.reloadData()
     }
     
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         shouldShowSearchResults = false
         statesTableView.reloadData()
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !shouldShowSearchResults {
             shouldShowSearchResults = true
             statesTableView.reloadData()
@@ -183,14 +183,14 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.resignFirstResponder()
     }
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         let searchString = searchController.searchBar.text
         
         // Filter the data array and get only those countries that match the search text.
         filteredStates = states.filter({ (state) -> Bool in
-            let stateText: NSString = state.name
+            let stateText: NSString = state.name as NSString
             
-            return (stateText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
+            return (stateText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
         })
         
         // Reload the tableview.
@@ -206,7 +206,7 @@ class StatesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }

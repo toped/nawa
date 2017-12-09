@@ -1,0 +1,6 @@
+framework module Pods_NAWA {
+  umbrella header "Pods-NAWA-umbrella.h"
+
+  export *
+  module * { export * }
+}

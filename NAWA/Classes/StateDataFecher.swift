@@ -16,30 +16,28 @@ class StateDataFecher: NSObject {
     }
     
     
-    func getCitiesForState(state: String, completion: (result: [City]?, success: Bool) -> Void) {
+    func getCitiesForState(state: String, completion: @escaping (_ result: [City]?, _ success: Bool) -> Void) {
         
-        let URL = NSURL(string: "http://topedaramola.com/apis/worlds/apiv1/state/?method=getCitiesForState&state_abbr=" + state)!
+        let URL = "http://topedaramola.com/apis/worlds/apiv1/state/?method=getCitiesForState&state_abbr=" + state
         print("got back: \(URL)")
-        let URLRequest = NSMutableURLRequest(URL: URL)
-        URLRequest.cachePolicy = .ReloadIgnoringCacheData
         
-        Alamofire.request(URLRequest).responseJSON { response in
+        Alamofire.request(URL, method: HTTPMethod.get, encoding: JSONEncoding.default).responseJSON { response in
             //print(response.request)  // original URL request
             //print(response.response) // URL response
             //print(response.data)     // server data
             //print(response.result)   // result of response serialization
             
-            
             switch response.result {
-            case .Success(let JSON):
+            case .success(let JSON):
                 //print("Success with JSON: \(JSON)")
                 
-                let response = JSON as! [String: AnyObject]
+                let response = JSON as! [String: AnyObject];
                 let resoinseCities = response["Cities"] as! NSArray
                 var cities = [City]()
                 
                 for item in resoinseCities {
-                   
+                   let item = item as! [String : Any]
+                    
                     guard let name = item["city"] as? String,
                         let latitude = item["latitude"] as? Float,
                         let longitude = item["longitude"] as? Float else {
@@ -52,13 +50,13 @@ class StateDataFecher: NSObject {
                     
                 }
                 
-                completion(result:cities, success:true)
+                completion(cities, true)
 
                 
-            case .Failure(let error):
+            case .failure(let error):
                 print("Request failed with error: \(error)")
                 
-                completion(result:nil, success:false)
+                completion(nil, false)
 
             }
 

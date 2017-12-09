@@ -9,11 +9,11 @@
 import UIKit
 
 protocol CitySelectionDelegate: class {
-    func updateViewWithCity(city:String)
+    func updateViewWithCity(city:City)
 }
 
 class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate{
-    
+
     weak var delegate:CitySelectionDelegate?
     var cities = [City]()
     var filteredCities = [City]()
@@ -22,15 +22,15 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var shouldShowSearchResults = false
     @IBOutlet weak var citiesTableView: UITableView!
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.edgesForExtendedLayout = UIRectEdge.None
+        self.edgesForExtendedLayout = []
         //Hide the navigation bar
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
@@ -43,13 +43,13 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         //set right bar button
         let dismissBtn = UIBarButtonItem(title:"Cancel",
-                                         style: UIBarButtonItemStyle.Plain,
+                                         style: UIBarButtonItemStyle.plain,
                                          target: self,
                                          action: #selector(self.dismissView))
         
         navigationItem.rightBarButtonItems = [dismissBtn]
         
-        dismissBtn.tintColor = UIColor.lightGrayColor()
+        dismissBtn.tintColor = UIColor.lightGray
         
     }
     
@@ -61,22 +61,22 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     // needed a second dismiss function to avoid error: (-[UIBarButtonItem copyWithZone:]: unrecognized selector sent to instance)
-    func dismissView() {
+    @objc func dismissView() {
         
         // Clear the Search bar text
-        self.searchController.active = false;
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.searchController.isActive = false;
+        self.navigationController?.dismiss(animated: true, completion: nil)
         
     }
     
-    func dismissViewWith(city: String?) {
+    func dismissViewWith(city: City?) {
         
         // Clear the Search bar text
-        self.searchController.active = false;
-        self.navigationController?.dismissViewControllerAnimated(true, completion: {
+        self.searchController.isActive = false;
+        self.navigationController?.dismiss(animated: true, completion: {
             
             if city != nil {
-                self.delegate?.updateViewWithCity(city!)
+                self.delegate?.updateViewWithCity(city: city!)
             }
             
         })
@@ -86,7 +86,7 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func configureUI() {
         
         //View controller-based status bar appearance added to Info.plist
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
         
     }
     
@@ -94,7 +94,7 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if shouldShowSearchResults {
             return filteredCities.count
@@ -105,8 +105,8 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GlobalConstants.CITY_CELL_IDENTIFIER, forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: GlobalConstants.CITY_CELL_IDENTIFIER, for: indexPath)
         
         // Configure the cell...
         if shouldShowSearchResults {
@@ -120,10 +120,10 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView.cellForRowAtIndexPath(indexPath)?.textLabel?.text == "" {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if tableView.cellForRow(at: indexPath)?.textLabel?.text == "" {
+            tableView.deselectRow(at: indexPath as IndexPath, animated: true)
             return
         }
         
@@ -137,11 +137,11 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         
-        self.dismissViewWith(selectedCity.name)
+        self.dismissViewWith(city: selectedCity)
         
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.dismissKeyboard()
     }
     
@@ -156,7 +156,7 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.placeholder = "Search cities..."
         searchController.searchBar.delegate = self
         searchController.searchBar.sizeToFit()
-        self.edgesForExtendedLayout = UIRectEdge.None
+        self.edgesForExtendedLayout = []
         
         // Place the search bar view to the tableview headerview.
         view.addSubview(searchController.searchBar)
@@ -164,18 +164,18 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //countyOfficeTable.tableHeaderView = searchController.searchBar
     }
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         shouldShowSearchResults = true
         citiesTableView.reloadData()
     }
     
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         shouldShowSearchResults = false
         citiesTableView.reloadData()
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !shouldShowSearchResults {
             shouldShowSearchResults = true
             citiesTableView.reloadData()
@@ -184,14 +184,14 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.resignFirstResponder()
     }
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
+    func updateSearchResults(for searchController: UISearchController) {
         let searchString = searchController.searchBar.text
         
         // Filter the data array and get only those countries that match the search text.
         filteredCities = cities.filter({ (city) -> Bool in
-            let cityText: NSString = city.name
+            let cityText: NSString = city.name as NSString
             
-            return (cityText.rangeOfString(searchString!, options: NSStringCompareOptions.CaseInsensitiveSearch).location) != NSNotFound
+            return (cityText.range(of: searchString!, options: NSString.CompareOptions.caseInsensitive).location) != NSNotFound
         })
         
         // Reload the tableview.
@@ -207,7 +207,7 @@ class CitiesViewController: UIViewController, UITableViewDelegate, UITableViewDa
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
      }

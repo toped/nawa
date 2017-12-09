@@ -21,8 +21,9 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
     @IBOutlet weak var stateTextField: UITextField!
     var states = [State]()
     var cities = [City]()
+    var selectedCity = City()
     
-    var weatherConditions = WeatherCondition?()
+    var weatherConditions = WeatherCondition()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,13 +31,13 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         // Do any additional setup after loading the view.
         //set right bar button
         let dismissBtn = UIBarButtonItem(title:"Cancel",
-                                         style: UIBarButtonItemStyle.Plain,
+                                         style: UIBarButtonItemStyle.plain,
                                          target: self,
                                          action: #selector(self.dismissView))
         
         navigationItem.rightBarButtonItems = [dismissBtn]
         
-        dismissBtn.tintColor = UIColor.lightGrayColor()
+        dismissBtn.tintColor = UIColor.lightGray
         
         configureTapGestures()
         configureUI()
@@ -59,13 +60,13 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         locationInputView.clipsToBounds = true
         
     }
-    func dismissView() {
+    @objc func dismissView() {
         
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
         
     }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField == self.stateTextField {
             self.selectState()
             
@@ -74,18 +75,18 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         
         if textField == self.cityTextField {
             
-            if self.stateTextField.hasText() {
+            if self.stateTextField.hasText {
                 self.selectCity()
             }
             else {
-                let alertController = UIAlertController(title: "Whoops", message: "You must select a state first.", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "Whoops", message: "You must select a state first.", preferredStyle: .alert)
                 
-                let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                     // ...
                 }
                 alertController.addAction(cancelAction)
                 
-                self.presentViewController(alertController, animated: true) {
+                self.present(alertController, animated: true) {
                     // ...
                 }
                 
@@ -100,32 +101,32 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
     
     func selectState() {
         
-        let vc = self.storyboard!.instantiateViewControllerWithIdentifier("States") as? StatesViewController
+        let vc = self.storyboard!.instantiateViewController(withIdentifier: "States") as? StatesViewController
         vc?.delegate = self
         vc?.states = self.states
         let vc_nav = UINavigationController(rootViewController: vc!)
-        self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+        self.navigationController!.present(vc_nav, animated: true, completion: nil)
         
     }
     
     func selectCity() {
         
         if (self.cities.count > 0) {
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("Cities") as? CitiesViewController
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "Cities") as? CitiesViewController
             vc?.delegate = self
             vc?.cities = self.cities
             let vc_nav = UINavigationController(rootViewController: vc!)
-            self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+            self.navigationController!.present(vc_nav, animated: true, completion: nil)
         }
         else {
-            let alertController = UIAlertController(title: "Whoops", message: "Cities are still loading. Please try again.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Whoops", message: "Cities are still loading. Please try again.", preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                 // ...
             }
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true) {
+            self.present(alertController, animated: true) {
                 // ...
             }
 
@@ -141,11 +142,11 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         if GlobalConstants.hasConnectivity() {
 
         //get weather
-        openWeatherService.getCurrentWeather(self.cityTextField.text!, state:self.stateTextField.text!) { (result, success) in
+            openWeatherService.getCurrentWeather(city: self.selectedCity.name, state: self.stateTextField.text!, latitude: self.selectedCity.latitude, longitude: self.selectedCity.longitude) { (result, success) in
             if success {
                 
                 self.weatherConditions = result!
-                self.delegate?.updateViewWithNewWeatherData(self.weatherConditions!)
+                self.delegate?.updateViewWithNewWeatherData(data: self.weatherConditions)
                 
                 self.dismissView()
             }
@@ -157,14 +158,14 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         }
         else {
             
-            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                 // ...
             }
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true) {
+            self.present(alertController, animated: true) {
                 // ...
             }
             
@@ -174,7 +175,7 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
     }
     
     
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         
         self.view.endEditing(true)
         
@@ -187,23 +188,23 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         states = [State]()
         
         //Load States plist file
-        let fileManager = NSFileManager.defaultManager()
-        let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        let statesFilePath = directoryURL.URLByAppendingPathComponent("states.plist")
+        let fileManager = FileManager.default
+        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let statesFilePath = directoryURL.appendingPathComponent("states.plist")
         
         //Create Dictionary from file (Note: swift APIs don't have all the functionality of the core NSClasses so we have to use NSDictionary)
-        let statesDictionary = NSDictionary(contentsOfFile: statesFilePath.path!)
+        let statesDictionary = NSDictionary(contentsOfFile: statesFilePath.path)
         
         //Create an instance of State for each record in plist file
         for stateRecord in statesDictionary! {
             //print(stateRecord)
             //Create Dictionary from agent record
-            let stateDictionary: NSDictionary = (statesDictionary?.objectForKey(stateRecord.key)) as! NSDictionary
+            let stateDictionary: NSDictionary = (statesDictionary?.object(forKey: stateRecord.key)) as! NSDictionary
             
             //Init the CountyAgent
             let state = State(
-                name: stateDictionary.objectForKey("state") as! String,
-                stateAbbriviation: stateDictionary.objectForKey("abbreviation") as! String
+                name: stateDictionary.object(forKey: "state") as! String,
+                stateAbbriviation: stateDictionary.object(forKey: "abbreviation") as! String
             )
             
             //Add county agent to countyAgents array
@@ -212,27 +213,27 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         }
         
         //Sort the array of states stateAbbriviation
-        states.sortInPlace({ $0.stateAbbriviation < $1.stateAbbriviation })
+        states.sort(by: { $0.stateAbbriviation < $1.stateAbbriviation })
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        let encodedData = NSKeyedArchiver.archivedDataWithRootObject(states)
-        userDefaults.setObject(encodedData, forKey:GlobalConstants.STATES_KEY)
+        let userDefaults = UserDefaults.standard
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: states)
+        userDefaults.set(encodedData, forKey:GlobalConstants.STATES_KEY)
         userDefaults.synchronize()
         
     }
     
     func loadStatesPlistFromBundle() {
         
-        let fileManager = NSFileManager.defaultManager()
-        let directoryURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
-        let destinationFileComponent = directoryURL.URLByAppendingPathComponent("states.plist")
+        let fileManager = FileManager.default
+        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let destinationFileComponent = directoryURL.appendingPathComponent("states.plist")
         
-        let bundle = NSBundle.mainBundle().pathForResource("states", ofType: "plist")! //Note: I'm force unwrappign because I know this file exists
+        let bundle = Bundle.main.path(forResource: "states", ofType: "plist")! //Note: I'm force unwrappign because I know this file exists
         
         //If the file does not already exist int the documents folder copy the file in the bundle to the documents directory
-        if !fileManager.fileExistsAtPath(destinationFileComponent.path!) {
+        if !fileManager.fileExists(atPath: destinationFileComponent.path) {
             do {
-                try fileManager.copyItemAtPath(bundle, toPath: destinationFileComponent.path!)
+                try fileManager.copyItem(atPath: bundle, toPath: destinationFileComponent.path)
             }
             catch {
                 print("Error: \(error)")
@@ -249,7 +250,7 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         
         if GlobalConstants.hasConnectivity() {
     
-        stateInfo.getCitiesForState(state, completion: { (result, success) in
+            stateInfo.getCitiesForState(state: state, completion: { (result, success) in
             
             if success {
                 
@@ -264,14 +265,14 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         }
         else {
             
-            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                 // ...
             }
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true) {
+            self.present(alertController, animated: true) {
                 // ...
             }
             
@@ -281,10 +282,11 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
         
     }
     
-    func updateViewWithCity(city:String) {
+    func updateViewWithCity(city:City) {
         
-        self.cityTextField.text = city
-        self.getWeather(self)
+        self.cityTextField.text = city.name
+        self.selectedCity = city
+        self.getWeather(sender: self)
         
     }
 
@@ -298,7 +300,7 @@ class EditLocationViewController: UIViewController, UITextFieldDelegate, StateSe
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }

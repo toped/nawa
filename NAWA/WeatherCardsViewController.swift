@@ -10,26 +10,27 @@ import UIKit
 import CoreLocation
 
 
-class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, ExpandedCellDelegate, EditLocationDelegate {
+class WeatherCardsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate, ExpandedCellDelegate, EditLocationDelegate {
+    
     
     var locationManager:CLLocationManager!
     
     var weatherLocations = [String]()
     var chosenCellFrame = CGRect()
-    var expander = ExpandedViewController?()
-    var currentPrimaryConditions = WeatherCondition?()
-    var currentSecondaryConditions = WeatherCondition?()
-    var currentTertiaryConditions = WeatherCondition?()
+    var expander: ExpandedViewController?
+    var currentPrimaryConditions = WeatherCondition()
+    var currentSecondaryConditions = WeatherCondition()
+    var currentTertiaryConditions = WeatherCondition()
     var editingPrimary = false
     var editingSecondary = false
     var editingTertiary = false
     
     @IBOutlet weak var weatherCardsTable: UITableView!
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.getWeather(self)
+        self.getWeather(sender: self)
         
     }
     
@@ -37,49 +38,49 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        weatherLocations = ["\(self.currentPrimaryConditions!.cityName), \(self.currentPrimaryConditions!.stateAbbreiviation)",
-                            "\(self.currentSecondaryConditions!.cityName), \(self.currentSecondaryConditions!.stateAbbreiviation)",
-                            "\(self.currentTertiaryConditions!.cityName), \(self.currentTertiaryConditions!.stateAbbreiviation)"];
+        weatherLocations = ["\(self.currentPrimaryConditions.cityName), \(self.currentPrimaryConditions.stateAbbreiviation)",
+            "\(self.currentSecondaryConditions.cityName), \(self.currentSecondaryConditions.stateAbbreiviation)",
+                            "\(self.currentTertiaryConditions.cityName), \(self.currentTertiaryConditions.stateAbbreiviation)"];
         
-        self.edgesForExtendedLayout = UIRectEdge.None
+        self.edgesForExtendedLayout = []
         self.navigationItem.title = "NAWA"
         
         //re-configureUI Appearance
         self.configureUI()
         
         //Show the navigation bar
-        self.navigationController?.navigationBarHidden = false
+        self.navigationController?.isNavigationBarHidden = false
         
         //hide the back button
-        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain,
+        let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain,
                                          target: navigationController,
                                          action: nil)
         
         navigationItem.leftBarButtonItem = backButton
         
         //set right bar button
-        let changeLocationBtn = UIBarButtonItem(image: UIImage(named: "refresh-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
-                                                style: UIBarButtonItemStyle.Plain,
+        let changeLocationBtn = UIBarButtonItem(image: UIImage(named: "refresh-btn")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal),
+                                                style: UIBarButtonItemStyle.plain,
                                                 target: self,
                                                 action: #selector(self.refreshWeather))
         
-        let currentLocationBtn = UIBarButtonItem(image: UIImage(named: "current-location-btn")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal),
-                                                 style: UIBarButtonItemStyle.Plain,
+        let currentLocationBtn = UIBarButtonItem(image: UIImage(named: "current-location-btn")?.withRenderingMode(UIImageRenderingMode.alwaysOriginal),
+                                                 style: UIBarButtonItemStyle.plain,
                                                  target: self,
                                                  action: #selector(self.getWeatherAtLocation))
         
         navigationItem.rightBarButtonItems = [changeLocationBtn, currentLocationBtn]
         
-        NSNotificationCenter.defaultCenter().addObserver(
+        NotificationCenter.default.addObserver(
             self,
             selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)),
-            name: UIApplicationDidBecomeActiveNotification,
+            name: NSNotification.Name.UIApplicationDidBecomeActive,
             object: nil)
         
     }
     
     func applicationDidBecomeActive(notification: NSNotification) {
-        self.getWeather(self)
+        self.getWeather(sender: self)
     }
     
     func configureLocationServices() {
@@ -94,9 +95,9 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         
     }
     
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == .AuthorizedWhenInUse {
-            if CLLocationManager.isMonitoringAvailableForClass(CLBeaconRegion.self) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            if CLLocationManager.isMonitoringAvailable(for: CLBeaconRegion.self) {
                 if CLLocationManager.isRangingAvailable() {
                     //self.currentLat = "\(self.locationManager.location?.coordinate.latitude)"
                     //self.currentLon = "\(self.locationManager.location?.coordinate.longitude)"
@@ -110,30 +111,30 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
                             } else {
                                 let placemark = placemarks!.last! as CLPlacemark
                                 
-                                let userDefaults = NSUserDefaults.standardUserDefaults()
-                                userDefaults.setObject(placemark.locality, forKey:GlobalConstants.PRIMARY_CITY_KEY)
-                                userDefaults.setObject(placemark.administrativeArea, forKey:GlobalConstants.PRIMARY_STATE_KEY)
+                                let userDefaults = UserDefaults.standard
+                                userDefaults.set(placemark.locality, forKey:GlobalConstants.PRIMARY_CITY_KEY)
+                                userDefaults.set(placemark.administrativeArea, forKey:GlobalConstants.PRIMARY_STATE_KEY)
                                 
-                                userDefaults.setBool(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
+                                userDefaults.set(true, forKey: GlobalConstants.USING_CURRENT_LOCATION)
                                 userDefaults.synchronize()
                                 
                                 self.weatherLocations[0] = "\(placemark.locality!), \(placemark.administrativeArea!)"
                                 
-                                self.getWeather(self)
+                                self.getWeather(sender: self)
                                 
                             }
                         })
                     }
                     else {
                         
-                        let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+                        let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .alert)
                         
-                        let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+                        let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                             // ...
                         }
                         alertController.addAction(cancelAction)
                         
-                        self.presentViewController(alertController, animated: true) {
+                        self.present(alertController, animated: true) {
                             // ...
                         }
                         
@@ -145,26 +146,24 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         }
     }
     
-    func refreshWeather() {
+    @objc func refreshWeather() {
         
-        if (self.expander != nil) {
-            self.expandedCellWillCollapse()
-        }
+        self.expandedCellWillCollapse()
         
-        self.getWeather(self)
+        self.getWeather(sender: self)
         
     }
     
-    func getWeatherAtLocation() {
+    @objc func getWeatherAtLocation() {
         
-        let alertController = UIAlertController(title: "Update Primary Location", message: "Would you like to update primary weather using your current location?", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Update Primary Location", message: "Would you like to update primary weather using your current location?", preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
             // ...
         }
         alertController.addAction(cancelAction)
         
-        let OKAction = UIAlertAction(title: "Yes", style: .Default) { (action) in
+        let OKAction = UIAlertAction(title: "Yes", style: .default) { (action) in
             
             if (self.expander != nil) {
                 self.expandedCellWillCollapse()
@@ -175,7 +174,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         }
         alertController.addAction(OKAction)
         
-        self.presentViewController(alertController, animated: true) {
+        self.present(alertController, animated: true) {
             // ...
         }
         
@@ -184,7 +183,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
     func configureUI() {
         
         //View controller-based status bar appearance added to Info.plist
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.Default
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
         
         
         
@@ -194,25 +193,25 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         
         let openWeatherService = OpenWeather.init(apiKey:GlobalConstants.OPEN_WEATHER_API_KEY)
         
-        let userDefaults = NSUserDefaults.standardUserDefaults()
+        let userDefaults = UserDefaults.standard
         
         if GlobalConstants.hasConnectivity() {
             
             //get primary weather
-            openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.PRIMARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.PRIMARY_STATE_KEY)!) { (result, success) in
+            openWeatherService.getCurrentWeather(city: userDefaults.string(forKey: GlobalConstants.PRIMARY_CITY_KEY)!, state:userDefaults.string(forKey: GlobalConstants.PRIMARY_STATE_KEY)!, latitude: userDefaults.string(forKey: GlobalConstants.PRIMARY_LAT_KEY)!, longitude: userDefaults.string(forKey: GlobalConstants.PRIMARY_LON_KEY)!) { (result, success) in
                 if success {
                     
                     self.currentPrimaryConditions = result!
                     
                     //get secondary weather
-                    openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.SECONDARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.SECONDARY_STATE_KEY)!) { (result, success) in
+                    openWeatherService.getCurrentWeather(city: userDefaults.string(forKey: GlobalConstants.SECONDARY_CITY_KEY)!, state:userDefaults.string(forKey: GlobalConstants.SECONDARY_STATE_KEY)!, latitude: userDefaults.string(forKey: GlobalConstants.SECONDARY_LAT_KEY)!, longitude: userDefaults.string(forKey: GlobalConstants.SECONDARY_LON_KEY)!) { (result, success) in
                         if success {
                             
                             self.currentSecondaryConditions = result!
                             
                             
                             //get tertiary weather conditions
-                            openWeatherService.getCurrentWeather(userDefaults.stringForKey(GlobalConstants.TERTIARY_CITY_KEY)!, state:userDefaults.stringForKey(GlobalConstants.TERTIARY_STATE_KEY)!) { (result, success) in
+                            openWeatherService.getCurrentWeather(city: userDefaults.string(forKey: GlobalConstants.TERTIARY_CITY_KEY)!, state:userDefaults.string(forKey: GlobalConstants.TERTIARY_STATE_KEY)!, latitude: userDefaults.string(forKey: GlobalConstants.TERTIARY_LAT_KEY)!, longitude: userDefaults.string(forKey: GlobalConstants.TERTIARY_LON_KEY)!) { (result, success) in
                                 if success {
                                     
                                     self.currentTertiaryConditions = result!
@@ -243,14 +242,14 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         }
         else {
             
-            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                 // ...
             }
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true) {
+            self.present(alertController, animated: true) {
                 // ...
             }
             
@@ -264,41 +263,45 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         return weatherLocations.count
         
     }
     
-    func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        let screenRect = UIScreen.mainScreen().bounds
+        let screenRect = UIScreen.main.bounds
         let screenHeight = screenRect.size.height
         let navBarRect = self.navigationController?.navigationBar.bounds
         let navBarHeight = navBarRect?.size.height
-        let statusBarHeight = UIApplication.sharedApplication().statusBarFrame.size.height
+        let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
         
         
         return (screenHeight - navBarHeight! - statusBarHeight) / CGFloat(weatherLocations.count);
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GlobalConstants.WEATHER_CELL_IDENTIFIER, forIndexPath: indexPath) as! WeatherCardTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: GlobalConstants.WEATHER_CELL_IDENTIFIER, for: indexPath as IndexPath) as! WeatherCardTableViewCell
         
         // Configure the cell...
         cell.locationName.text = weatherLocations[indexPath.row]
         
         if indexPath.row == 0 {
-            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
+            cell.contentView.backgroundColor = UIColor.init(red: 159.0/255.0,
+                                                            green: 99.0/255.0,
+                                                            blue: 46.0/255.0,
+                                                            alpha: 0.7)
+            
             cell.cellBackground.image = UIImage(named: "home-background")
             
-            cell.currentTemperature.text = "\(self.currentPrimaryConditions!.temperature_fahrenheit)°F"
-            cell.weatherIcon.image = UIImage(named:"\(self.currentPrimaryConditions!.mainIcon).png")
+            cell.currentTemperature.text = "\(self.currentPrimaryConditions.temperature_fahrenheit)°F"
+            cell.weatherIcon.image = UIImage(named:"\(self.currentPrimaryConditions.mainIcon).png")
             
-            let userDefaults = NSUserDefaults.standardUserDefaults()
+            let userDefaults = UserDefaults.standard
             
-            if userDefaults.boolForKey(GlobalConstants.USING_CURRENT_LOCATION){
+            if userDefaults.bool(forKey: GlobalConstants.USING_CURRENT_LOCATION){
                 cell.currentLocationLabel.text = "current location"
             }
             else {
@@ -307,21 +310,29 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             
         }
         else if indexPath.row == 1 {
-            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
+            cell.contentView.backgroundColor = UIColor.init(red: 1.0/255.0,
+                                                            green: 114.0/255.0,
+                                                            blue: 107.0/255.0,
+                                                            alpha: 0.7)
+            
             cell.cellBackground.image = UIImage(named: "home-background2")
             
-            cell.currentTemperature.text = "\(self.currentSecondaryConditions!.temperature_fahrenheit)°F"
-            cell.weatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions!.mainIcon).png")
+            cell.currentTemperature.text = "\(self.currentSecondaryConditions.temperature_fahrenheit)°F"
+            cell.weatherIcon.image = UIImage(named:"\(self.currentSecondaryConditions.mainIcon).png")
             
             cell.currentLocationLabel.text = ""
             
         }
         else {
-            cell.contentView.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
+            cell.contentView.backgroundColor = UIColor.init(red: 88.0/255.0,
+                                                            green: 90.0/255.0,
+                                                            blue: 136.0/255.0,
+                                                            alpha: 0.7)
+            
             cell.cellBackground.image = UIImage(named: "home-background3")
             
-            cell.currentTemperature.text = "\(self.currentTertiaryConditions!.temperature_fahrenheit)°F"
-            cell.weatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions!.mainIcon).png")
+            cell.currentTemperature.text = "\(self.currentTertiaryConditions.temperature_fahrenheit)°F"
+            cell.weatherIcon.image = UIImage(named:"\(self.currentTertiaryConditions.mainIcon).png")
             
             cell.currentLocationLabel.text = ""
             
@@ -332,13 +343,13 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRowAtIndexPath(indexPath, animated: false) //deselect row so that color is the same when row collapses
+        tableView.deselectRow(at: indexPath as IndexPath, animated: false) //deselect row so that color is the same when row collapses
         
         //if !self.expander, initialize self.expander
         if (self.expander == nil) {
-            self.expander = self.storyboard!.instantiateViewControllerWithIdentifier("Expander") as? ExpandedViewController
+            self.expander = self.storyboard!.instantiateViewController(withIdentifier: "Expander") as? ExpandedViewController
             self.expander!.delegate = self
         }
         
@@ -346,8 +357,8 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         self.addChildViewController(self.expander!)
         
         //set the initial frame of the expander to be the same as the selected row
-        self.expander!.view.frame = tableView.rectForRowAtIndexPath(indexPath)
-        self.expander!.view.center = CGPointMake(self.expander!.view.center.x, self.expander!.view.center.y - tableView.contentOffset.y); // adjusts for the offset of the cell when you select it
+        self.expander!.view.frame = tableView.rectForRow(at: indexPath as IndexPath)
+        self.expander!.view.center = CGPoint(x:self.expander!.view.center.x, y:self.expander!.view.center.y - tableView.contentOffset.y); // adjusts for the offset of the cell when you select it
         
         //save the chosenFrame
         self.chosenCellFrame = self.expander!.view.frame;
@@ -355,17 +366,17 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         //customize the expanderview based on row
         if indexPath.row == 0 {
             self.expander!.currentWeatherConditions = currentPrimaryConditions
-            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
+            self.expander!.cell.backgroundColor = UIColor.init(red: 159.0/255.0, green: 99.0/255.0, blue: 46.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background")
         }
         else if indexPath.row == 1 {
             self.expander!.currentWeatherConditions = currentSecondaryConditions
-            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
+            self.expander!.cell.backgroundColor = UIColor.init(red: 1.0/255.0, green: 114.0/255.0, blue: 107.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background2")
         }
         else {
             self.expander!.currentWeatherConditions = currentTertiaryConditions
-            self.expander!.cell.backgroundColor = UIColor.init(colorLiteralRed: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
+            self.expander!.cell.backgroundColor = UIColor.init(red: 88.0/255.0, green: 90.0/255.0, blue: 136.0/255.0, alpha: 0.7)
             self.expander!.locationBackgroundImage.image = UIImage(named: "home-background3")
         }
         self.expander!.bottomCell.backgroundColor = self.expander!.cell.backgroundColor
@@ -380,30 +391,30 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
         self.view.addSubview(self.expander!.view)
         
         //animate the view
-        UIView.animateWithDuration(0.55, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        UIView.animate(withDuration: 0.55, delay: 0.0, options: [], animations: { () -> Void in
             
             self.expander!.view.frame = tableView.frame
             self.expander!.locationBackgroundImage.alpha = 0.8
             self.expander!.view.alpha = 1
-            self.expander!.view.backgroundColor = UIColor.init(colorLiteralRed: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0)
+            self.expander!.view.backgroundColor = UIColor.init(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 1.0)
             
             
-            }, completion: { (finished: Bool) -> Void in
-                
-                self.expander!.didMoveToParentViewController(self)
-                
+        }, completion: { (finished: Bool) -> Void in
+            
+            self.expander!.didMove(toParentViewController: self)
+            
         })
         
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]?  {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         // 1
-        let editAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Edit" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let editAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "Edit" , handler: { (action, indexPath) -> Void in
             
-            let vc = self.storyboard!.instantiateViewControllerWithIdentifier("EditLocation") as? EditLocationViewController
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "EditLocation") as? EditLocationViewController
             vc?.delegate = self
             
             if indexPath.row == 0 {
@@ -417,7 +428,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             }
             
             let vc_nav = UINavigationController(rootViewController: vc!)
-            self.navigationController!.presentViewController(vc_nav, animated: true, completion: nil)
+            self.navigationController!.present(vc_nav, animated: true, completion: nil)
             
         })
         
@@ -427,23 +438,26 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
     
     func expandedCellWillCollapse() {
         
-        expander!.willMoveToParentViewController(nil)
+        expander!.willMove(toParentViewController: nil)
         self.expander!.currentTemperatureLabel.text = ""
         self.expander!.locationLabel.text = ""
         
         //animate the view
-        UIView.animateWithDuration(0.55, delay: 0.0, options: UIViewAnimationOptions.TransitionNone, animations: { () -> Void in
+        UIView.animate(withDuration: 0.55, delay: 0.0, options: [], animations: { () -> Void in
             
             self.expander!.view.frame = self.chosenCellFrame
             self.expander!.locationBackgroundImage.alpha = 0
             self.expander!.view.alpha = 0
-            self.expander!.view.backgroundColor = UIColor.init(colorLiteralRed: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+            self.expander!.view.backgroundColor = UIColor.init(red: 0.0/255.0,
+                                                               green: 0.0/255.0,
+                                                               blue: 0.0/255.0,
+                                                               alpha: 1.0)
             
             
-            }, completion: { (finished: Bool) -> Void in
-                
-                self.expander!.view.removeFromSuperview()
-                self.expander!.removeFromParentViewController()
+        }, completion: { (finished: Bool) -> Void in
+            
+            self.expander!.view.removeFromSuperview()
+            self.expander!.removeFromParentViewController()
         })
         
     }
@@ -457,10 +471,10 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             self.currentPrimaryConditions = data
             self.weatherLocations[0] = "\(data.cityName), \(data.stateAbbreiviation)"
             
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            userDefaults.setObject(data.cityName, forKey:GlobalConstants.PRIMARY_CITY_KEY)
-            userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.PRIMARY_STATE_KEY)
-            userDefaults.setBool(false, forKey:GlobalConstants.USING_CURRENT_LOCATION)
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(data.cityName, forKey:GlobalConstants.PRIMARY_CITY_KEY)
+            userDefaults.set(data.stateAbbreiviation, forKey:GlobalConstants.PRIMARY_STATE_KEY)
+            userDefaults.set(false, forKey:GlobalConstants.USING_CURRENT_LOCATION)
             userDefaults.synchronize()
             
         }
@@ -471,9 +485,9 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             self.currentSecondaryConditions = data
             self.weatherLocations[1] = "\(data.cityName), \(data.stateAbbreiviation)"
             
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            userDefaults.setObject(data.cityName, forKey:GlobalConstants.SECONDARY_CITY_KEY)
-            userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.SECONDARY_STATE_KEY)
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(data.cityName, forKey:GlobalConstants.SECONDARY_CITY_KEY)
+            userDefaults.set(data.stateAbbreiviation, forKey:GlobalConstants.SECONDARY_STATE_KEY)
             userDefaults.synchronize()
             
         }
@@ -484,9 +498,9 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
             self.currentTertiaryConditions = data
             self.weatherLocations[2] = "\(data.cityName), \(data.stateAbbreiviation)"
             
-            let userDefaults = NSUserDefaults.standardUserDefaults()
-            userDefaults.setObject(data.cityName, forKey:GlobalConstants.TERTIARY_CITY_KEY)
-            userDefaults.setObject(data.stateAbbreiviation, forKey:GlobalConstants.TERTIARY_STATE_KEY)
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(data.cityName, forKey:GlobalConstants.TERTIARY_CITY_KEY)
+            userDefaults.set(data.stateAbbreiviation, forKey:GlobalConstants.TERTIARY_STATE_KEY)
             userDefaults.synchronize()
             
         }
@@ -503,7 +517,7 @@ class WeatherCardsViewController: UIViewController, CLLocationManagerDelegate, E
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
      }

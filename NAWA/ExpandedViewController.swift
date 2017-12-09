@@ -21,7 +21,7 @@ class ExpandedViewController: UIViewController {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var currentTemperatureLabel: UILabel!
     @IBOutlet weak var mainWeatherIcon: UIImageView!
-    var currentWeatherConditions = WeatherCondition?()
+    var currentWeatherConditions = WeatherCondition()
     
     //5-day forecast
     @IBOutlet weak var day1Label: UILabel!
@@ -41,14 +41,14 @@ class ExpandedViewController: UIViewController {
     @IBOutlet weak var day5Temp: UILabel!
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.currentTemperatureLabel.text = "\(self.currentWeatherConditions!.temperature_fahrenheit)°F"
-        self.mainWeatherIcon.image = UIImage(named:"\(self.currentWeatherConditions!.mainIcon).png")
+        self.currentTemperatureLabel.text = "\(self.currentWeatherConditions.temperature_fahrenheit)°F"
+        self.mainWeatherIcon.image = UIImage(named:"\(self.currentWeatherConditions.mainIcon).png")
         
         // get 5-day forcast
-        self.getForecast(self)
+        self.getForecast(sender: self)
     }
     
     override func viewDidLoad() {
@@ -77,7 +77,7 @@ class ExpandedViewController: UIViewController {
         if GlobalConstants.hasConnectivity() {
             
             //get primary weather
-            openWeatherService.get5DayForcast((self.currentWeatherConditions?.cityName)!, state:(self.currentWeatherConditions?.stateAbbreiviation)!) { (result, success) in
+            openWeatherService.get5DayForcast(city: (self.currentWeatherConditions.cityName), state:(self.currentWeatherConditions.stateAbbreiviation), latitude: self.currentWeatherConditions.latitude, longitude: self.currentWeatherConditions.longitude) { (result, success) in
                 if success {
                     
                     //print(result!)
@@ -116,14 +116,14 @@ class ExpandedViewController: UIViewController {
         }
         else {
             
-            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "Connection Error", message: "Please make sure you are connected to the internet and try again later.", preferredStyle: .alert)
             
-            let cancelAction = UIAlertAction(title: "OK", style: .Cancel) { (action) in
+            let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
                 // ...
             }
             alertController.addAction(cancelAction)
             
-            self.presentViewController(alertController, animated: true) {
+            self.present(alertController, animated: true) {
                 // ...
             }
             
@@ -137,7 +137,7 @@ class ExpandedViewController: UIViewController {
      // MARK: - Navigation
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
      // Get the new view controller using segue.destinationViewController.
      // Pass the selected object to the new view controller.
      }
